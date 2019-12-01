@@ -1,0 +1,1210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>ssh访问控制</title>
+    <url>/2019/11/28/ssh%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/</url>
+    <content><![CDATA[<h2 id="SSH-访问控制"><a href="#SSH-访问控制" class="headerlink" title="SSH 访问控制"></a>SSH 访问控制</h2><blockquote>
+<p>按以下要求配置 SSH 访问:<br>用户能够从域内 example.com 的客户端SSH远程访问您的两个虚拟机系统<br>在域 my133t.org 内的客户端不能访问您的两个虚拟机系统</p>
+</blockquote>
+<ul>
+<li><p>方法一</p>
+<ul>
+<li><p>编辑配置文件 /etc/hosts.deny</p>
+<p>  添加<code>sshd:.my133t.org</code> 或 <code>sshd:172.25.0.</code></p>
+<p>  注意 /etc/hosts.allow 和 /etc/hosts.deny 配置同一网段时，/etc/hosts.allow 有效，配置域名和 ip 时可以使用 . 省略</p>
+</li>
+</ul>
+</li>
+<li><p>方法二</p>
+<ul>
+<li><p>配置防火墙的富规则</p>
+<pre><code># firewall-cmd  --permanent --zone=public --add-rich-rule &apos;rule family=ipv4 source address=172.25.0.10 service name=ssh reject&apos;
+# firewall-cmd --reload</code></pre><p>注:</p>
+<ul>
+<li>可以使用 <code>firewall-cmd --get-services</code> 查看防火墙富规则支持的服务名称</li>
+<li>可以使用 <code>firewall-cmd --list-rich-rules</code> 查看当前防火墙设置的富规则</li>
+<li>配置文件位于 <code>/etc/firewalld/zones/public.xml</code></li>
+<li>可以使用 <code>firewall-cmd --remove-rich-rule ···</code> 删除某条富规则</li>
+<li>也可以直接删除配置文件中对应的规则条目</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>RedHat设置selinux</title>
+    <url>/2019/11/28/RedHat%E8%AE%BE%E7%BD%AEselinux/</url>
+    <content><![CDATA[<h2 id="RedHat-设置-selinux"><a href="#RedHat-设置-selinux" class="headerlink" title="RedHat 设置 selinux"></a>RedHat 设置 selinux</h2><p>设置 selinux 为 enforcing 模式</p>
+<ol>
+<li><p><code>vim /etc/selinux/config</code> 修改 <code>SELINUX=enforcing</code></p>
+</li>
+<li><p>命令 <code>getenforce</code> 可以查看当前 selinux 状态</p>
+</li>
+<li><p>命令 <code>setenforce 1</code> 也可以设置 enforcing 模式，不过请注意， setenforce 无法在 Disabled 的模式底下进行模式的切换</p>
+</li>
+</ol>
+<hr>
+<h3 id="selinux"><a href="#selinux" class="headerlink" title="selinux"></a>selinux</h3><blockquote>
+<p>安全增强型 Linux（Security-Enhanced Linux）简称 SELinux，它是一个 Linux 内核模块，也是 Linux 的一个安全子系统。</p>
+</blockquote>
+<blockquote>
+<p>SELinux 主要由美国国家安全局开发。 linux 内核 2.6 及以上版本的内核都已经集成了 SELinux 模块。</p>
+</blockquote>
+<blockquote>
+<p>SELinux 主要作用就是最大限度地减小系统中服务进程可访问的资源（最小权限原则）。</p>
+</blockquote>
+<h5 id="DAC"><a href="#DAC" class="headerlink" title="DAC"></a>DAC</h5><blockquote>
+<p>在没有使用 SELinux 的操作系统中，决定一个资源是否能被访问的因素是：某个资源是否拥有对应用户的权限（读、写、执行）。</p>
+</blockquote>
+<blockquote>
+<p>只要访问这个资源的进程符合以上的条件就可以被访问。</p>
+</blockquote>
+<blockquote>
+<p>而最致命问题是，root 用户不受任何管制，系统上任何资源都可以无限制地访问。</p>
+</blockquote>
+<blockquote>
+<p>这种权限管理机制的主体是用户，也称为自主访问控制（Discretionary Access Control, DAC）。</p>
+</blockquote>
+<h5 id="MAC"><a href="#MAC" class="headerlink" title="MAC"></a>MAC</h5><blockquote>
+<p>在使用了 SELinux 的操作系统中，决定一个资源是否能被访问的因素除了上述因素之外，还需要判断每一类进程是否拥有对某一类资源的访问权限。</p>
+</blockquote>
+<blockquote>
+<p>这样一来，即使进程是以 root 身份运行的，也需要判断这个进程的类型以及允许访问的资源类型才能决定是否允许访问某个资源。进程的活动空间也可以被压缩到最小。</p>
+</blockquote>
+<blockquote>
+<p>即使是以 root 身份运行的服务进程，一般也只能访问到它所需要的资源。举例来说， WWW 服务器软件的达成进程为 httpd 这支程序。而默认情况下，httpd 仅能在 /var/www/ 这个目录底下存取文件，如果 httpd 这个进程想要到其他目录去存取数据时， 除了规则设定要开放外，目标目录也得要设定 成 httpd 可读取的模式 (type) 才行，即使程序出了漏洞，影响范围也只有在其允许访问的资源范围内。安全性大大增加。这种权限管理机制的主体是进程，也称为强制访问控制（Mandatory Access Control, MAC）。而 MAC 又细分为了两种方式，一种叫类别安全（MCS）模式，另一种叫多级安全（MLS）模式。</p>
+</blockquote>
+<h5 id="MAC-和-DAC-区别图"><a href="#MAC-和-DAC-区别图" class="headerlink" title="MAC 和 DAC 区别图"></a>MAC 和 DAC 区别图</h5><p><img src="https://raw.githubusercontent.com/way-ww/mypic/master/blog/mac%26dac%E5%8C%BA%E5%88%AB%E5%9B%BE.PNG" alt></p>
+<p>在 DAC 模式下，只要相应目录有相应用户的权限，就可以被访问。而在 MAC 模式下，还要受进程允许访问目录范围的限制</p>
+<h5 id="selinux-运作模式"><a href="#selinux-运作模式" class="headerlink" title="selinux 运作模式"></a>selinux 运作模式</h5><p>SELinux 是透过 MAC 的方式来控管进程，他控制的主体是进程，而目标则是该进程能否读取的『文件资源』！</p>
+<ul>
+<li><p><strong><strong>主体</strong></strong> (Subject)：</p>
+<blockquote>
+<p>SELinux 主要想要管理的就是进程，主体这里完全可以等同于进程；</p>
+</blockquote>
+</li>
+<li><p><strong><strong>目标</strong></strong>(Object)：</p>
+<blockquote>
+<p>主体进程能否存取的『目标资源』一般就是文件系统。被主体访问的资源可以是文件、目录、端口、设备等；</p>
+</blockquote>
+</li>
+<li><p><strong><strong>政策</strong></strong> (Policy)：</p>
+<blockquote>
+<p>由于进程与文件数量庞大，因此 SELinux 会依据某些服务来制订基本的存取安全性政策。这些政策内还会 有详细的规则 (rule) 来指定不同的服务开放某些资源的存取与否。系统中通常有大量的文件和进程，为了节省时间和开销，通常我们只是选择性地对某些进程进行管制。而哪些进程需要管制、要怎么管制是由政策决定的。一套政策里面有多个规则。部分规则可以按照需求启用或禁用（以下把该类型的规则称为布尔型规则）。规则是模块化、可扩展的。在安装新的应用程序时，应用程序可通过添加新的模块来添加规则。用户也可以手动地增减规则。在目前的 RedHat 7.x 里面仅有提供三个 主要的政策，分别是：</p>
+</blockquote>
+<ul>
+<li><p>targeted：针对网络服务限制较多，针对本机限制较少，是预设的政策；</p>
+</li>
+<li><p>minimum：由 target 修订而来，仅针对选择的进程来保护！</p>
+</li>
+<li><p>mls：完整的 SELinux 限制，限制方面较为严格。</p>
+<p>建议使用预设的 targeted 政策即可。</p>
+</li>
+</ul>
+</li>
+<li><p><strong><strong>安全上下文</strong></strong>（Security Context）</p>
+<blockquote>
+<p>安全上下文是 SELinux 的核心, 安全上下文可以看作为「进程安全上下文」和「文件安全上下文」俩部分。一个「进程安全上下文」一般对应多个「文件安全上下文」。只有两者的安全上下文对应上了，进程才能访问文件。它们的对应关系由政策中的规则决定。文件安全上下文由文件创建的位置和创建文件的进程所决定。而且系统有一套默认值，用户也可以对默认值进行设定。需要注意的是，单纯的移动文件操作并不会改变文件的安全上下文。</p>
+</blockquote>
+</li>
+<li><p><strong><strong>安全上下文的结构与含义</strong></strong></p>
+<blockquote>
+<p>安全上下文有四个字段，分别用冒号隔开。形如：system_u:object_r:admin_home_t:s0<br><img src="https://raw.githubusercontent.com/way-ww/mypic/master/blog/%E5%AE%89%E5%85%A8%E4%B8%8A%E4%B8%8B%E6%96%87.PNG" alt></p>
+</blockquote>
+</li>
+<li><p>SELinux 的工作模式</p>
+<blockquote>
+<p>SELinux 有三种工作模式，分别是：</p>
+</blockquote>
+<blockquote>
+<ol>
+<li>enforcing：强制模式。违反 SELinux 规则的行为将被阻止并记录到日志中。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>permissive：宽容模式。违反 SELinux 规则的行为只会记录到日志中。一般为调试用。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>disabled：关闭 SELinux。</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>SELinux 工作模式可以在 /etc/selinux/config 中设定。</p>
+</blockquote>
+<blockquote>
+<p>如果想从 disabled 切换到 enforcing 或者 permissive 的话，需要重启系统。反过来也一样。</p>
+</blockquote>
+<blockquote>
+<p>enforcing 和 permissive 模式可以通过 setenforce 1|0 命令快速切换。</p>
+</blockquote>
+<blockquote>
+<p>需要注意的是，如果系统已经在关闭 SELinux 的状态下运行了一段时间，在打开 SELinux 之后的第一次重启速度可能会比较慢。因为系统必须为磁盘中的文件创建安全上下文</p>
+</blockquote>
+<blockquote>
+<p>此外需要注意的是 SELinux 日志的记录需要借助 auditd.service 这个服务，所以最好不要禁用它。</p>
+</blockquote>
+</li>
+<li><p>selinux 操作</p>
+</li>
+<li></li>
+</ul>
+<ol>
+<li><p>查询文件或目录的安全上下文</p>
+<pre><code># ls -Z &lt;文件或目录&gt;</code></pre></li>
+<li><p>查询进程的安全上下文</p>
+<pre><code># ps -eZ | grep -E &apos;进程名&apos;</code></pre></li>
+<li><p>手动修改文件或目录的安全上下文</p>
+<pre><code># chcon &lt;选项&gt; &lt;文件或目录 1&gt; [&lt;文件或目录 2&gt;...]</code></pre><p> <strong>选项功能</strong></p>
+<p> -u &lt;值&gt; 修改安全上下文的用户字段</p>
+<p> -r &lt;值&gt;修改安全上下文的角色字段</p>
+<p> -t &lt;值&gt;修改安全上下文的类型字段</p>
+<p> -l &lt;值&gt;修改安全上下文的级别字段</p>
+<p> –reference &lt;文件或目录&gt;修改与指定文件或目录相一致的安全上下文</p>
+<p> -R递归操作</p>
+<p> -h修改软链接的安全上下文（不加此选项则修改软链接对应文件）</p>
+</li>
+<li><p>把文件或目录的安全上下文恢复到默认值</p>
+<pre><code># restorecon [选项] &lt;文件或目录 1&gt; [&lt;文件或目录 2&gt;...]
+# restorecon -R /usr/share/nginx/html/        示例</code></pre></li>
+<li><p>查询系统中的布尔型规则及其状态</p>
+<pre><code># getsebool -a</code></pre><p>由于该命令要么查询所有规则，要么只查询一个规则，所以一般都是先查询所有规则然后用 grep 筛选。</p>
+</li>
+<li><p>开关一个布尔型规则</p>
+<pre><code># setsebool [选项] &lt;规则名称&gt; &lt;on|off&gt;        （可接 -P 选项重启依然生效）
+# setsebool -P httpd_anon_write on            示例开启 httpd_anon_write  规则</code></pre></li>
+<li><p>添加目录的默认安全上下文</p>
+<pre><code># semanage fcontext -a -t &lt;文件安全上下文中的类型字段&gt; &quot;&lt;目录（后面不加斜杠）&gt;(/.*)?&quot;
+注：目录或文件的默认安全上下文可以通过 semanage fcontext -l 命令配合 grep 过滤查看</code></pre></li>
+<li><p>SELinux 违规日志保存在 /var/log/audit/audit.log</p>
+</li>
+</ol>
+<p>详见： 《鸟哥的Linux私房菜》 第四版 第十六章</p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>alias</title>
+    <url>/2019/11/28/alias/</url>
+    <content><![CDATA[<pre><code>alias 命令用来设置 Linux　shell 命令的别名。可以使用alias命令将较长的命令简写方便使用。</code></pre><ul>
+<li><p>基本用法</p>
+<pre><code># alias rm=&apos;echo do not use rm&apos;            临时生效，离开当前 shell 和重启后失效</code></pre></li>
+<li><p>永久生效</p>
+<pre><code>将 alias 命令写入到 bashrc 或 profile 文件中，重启或者 source 永久生效</code></pre></li>
+<li><p>priofile 和 bashrc 加载过程</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/way-ww/mypic/master/blog/profile%E5%8A%A0%E8%BD%BD.PNG" alt></p>
+<ul>
+<li><p>冲突内容最后加载的生效</p>
+</li>
+<li><p>非登录 shell 无法读取 /etc/profile</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>RedHat7修改root密码</title>
+    <url>/2019/11/28/RedHat7%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81/</url>
+    <content><![CDATA[<ol>
+<li>开机启动系统进入 grub 选择启动内核项时按键盘 e 进入编辑模式</li>
+<li>按键盘的方向键向下移动光标到 linux16 所在行再按下键盘上的 end 按键定位到所在行的末尾处</li>
+<li>在行末添加 <code>rd.break console=tty0</code></li>
+<li>按下 <code>ctrl+x</code> 以此设定启动到shell</li>
+<li>重新挂载 /sysroot 可读可写 <code>mount -o remount,rw /sysroot</code></li>
+<li>换根 <code>chroot /sysroot</code> </li>
+<li>复制一份原有的 shadow 文件<code>cp /etc/shadow /etc/shadow_bak</code></li>
+<li>重新录入 root 密码 <code>passwd root</code></li>
+<li>使 selinux 生效(按实际情况可选) <code>touch /.autorelabel</code></li>
+<li>退出环境并重启 <code>exit</code> 之后 <code>reboot</code></li>
+</ol>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>firewall-cmd富规则</title>
+    <url>/2019/11/05/firewal%E5%AF%8C%E8%A7%84%E5%88%99/</url>
+    <content><![CDATA[<p>1 添加富规则</p>
+<p><code>firewall-cmd --permanent --add-rich-rule=&#39;rule family=ipv4 source address=192.168.122.219 service name=ssh reject&#39;</code> 永久拒绝指定ip地址的ssh访问</p>
+<p>2 移除富规则</p>
+<p><code>firewall-cmd --permanent --remove-rich-rule=&#39;rule family=ipv4 source address=192.168.122.219 service name=ssh reject</code>永久移除该条富规则  </p>
+<p>3 默认配置文件</p>
+<p>/etc/firewalld/zones/public.xml<br>可直接修改配置文件来达到同样的目的</p>
+<p>4 默认zone为public 如果无法删除一条信息错误的规则可以直接删除配置文件中相应的内容，–permanent 添加永久的规则(加与不加的区别是重启后是否任然有效)</p>
+<p>5 相关命令</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --list-rich-rules  列出所有富规则(默认为public)</span></span><br><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --list-rich-rules --zone=home  列出home区域的所有富规则</span></span><br><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --get-services  列出可用于防火墙规则的预定义服务</span></span><br><span class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --list-services   列出区域中允许的服务(默认为public)</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+  </entry>
+  <entry>
+    <title>centos7设置时间</title>
+    <url>/2019/11/05/centos7%E8%AE%BE%E7%BD%AE%E6%97%B6%E9%97%B4/</url>
+    <content><![CDATA[<ol>
+<li>安装ntp软件包       </li>
+</ol>
+<p><code>yum install ntp</code></p>
+<ol start="2">
+<li>设置服务自启动       </li>
+</ol>
+<p><code>systemctl enable ntpd</code></p>
+<ol start="3">
+<li>启动ntp服务      </li>
+</ol>
+<p><code>systemctl start ntpd</code></p>
+<ol start="4">
+<li>修改系统时区     </li>
+</ol>
+<p><code>ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></p>
+<ol start="5">
+<li>date查看当前时间</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Nginx安装</title>
+    <url>/2019/10/28/Nginx%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Centos 7 安装nginx1.11.1</p>
+<ol>
+<li><p>安装之前的准备</p>
+<ul>
+<li><p>安装pcre(支持rewrite模块)<br><code>yum install pcre*</code> </p>
+</li>
+<li><p>安装ssl(可选，不需要ssl支持可跳过)<br><code>yum install openssl*</code></p>
+</li>
+</ul>
+</li>
+<li><p>安装 nginx</p>
+<ul>
+<li><p>建立目录<br><code>mkdir -p /usr/local/nginx/src</code> 用来存放源码包<br><code>mkdir -p /usr/local/nginx/nginx-conf/conf</code>  用来存放配置文件       </p>
+</li>
+<li><p>下载nginx源码包到新建的目录<br><code>wget http://nginx.org/download/nginx-1.11.1.tar.gz -P /usr/local/nginx/src</code>    </p>
+</li>
+<li><p>解压源码包<br><code>cd /usr/local/nginx/src &amp;&amp; tar -xzvf nginx-1.11.1.tar.gz</code></p>
+</li>
+<li><p>配置<br><code>./configure --prefix=/usr/local/nginx/src/nginx-1.11.1 --conf-path=/usr/localnginx/nginx-conf/vhost/nginx.conf --with-http_ssl_module --with-http_realip_module --with-http_dav_module --with-http_gzip_static_module --with-http_v2_module --with-http_stub_status_module --with-pcre</code></p>
+</li>
+<li><p>安装<br><code>make &amp;&amp; make install</code><br>/usr/local/nginx/nginx-conf/conf 目录里存放以网站为单位的配置文件和子目录，文件名以网站域名命名，其他配置文件放在/usr/local/nginx/nginx-conf/这样可以配置分离，互不影响，而且好定位问题。</p>
+</li>
+<li><p>做链接<br><code>ln -s /usr/local/nginx/nginx-1.11.1/nginx /usr/bin</code></p>
+</li>
+<li><p>检查版本<br><code>nginx -v</code></p>
+<p>完成</p>
+</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>service</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>vmstat</title>
+    <url>/2019/10/14/vmstat/</url>
+    <content><![CDATA[<p>vmstat是virtual memory statistics的缩写，可对系统的虚拟内存，进程，cpu活动进行监控。它是对系统的整体情况进行统计。不足之处是无法对某个进程进行深入分析。</p>
+<p><strong>虚拟内存原理</strong><br>在系统中运行的每个进程都需要使用到内存，但不是每个进程每时每刻都需要使用系统分配的内存空间。当系统运行所需内存超过实际的物理内存，内核会释放某些进程所占用但未使用的部分，将这部分资料存储在磁盘上直到进程下一次调用，并将释放出的内存提供给有需要的进程使用。</p>
+<p>在Linux内存管理中，主要是通过调页（paging）和交换（swapping）来完成上述的内存调度。调页算法是将内存中最近不常使用的页面换到磁盘上，把活动页面保留在内存中供进程使用。交换技术是将整个进程，而不是部分页面全部交换到磁盘上。分页(Page)写入磁盘的过程被称作Page-Out，分页(Page)从磁盘重新回到内存的过程被称作Page-In。当内核需要一个分页时，但发现此分页不在物理内存中(因为已经被Page-Out了)，此时就发生了分页错误（Page Fault）。</p>
+<p>当系统内核发现可运行内存变少时，就会通过Page-Out来释放一部分物理内存。经管Page-Out不是经常发生，但是如果Page-out频繁不断的发生，直到当内核管理分页的时间超过运行程式的时间时，系统效能会急剧下降。这时的系统已经运行非常慢或进入暂停状态，这种状态亦被称作thrashing(颠簸)。</p>
+<p>命令格式</p>
+<p>vmstat [options] [delay [count]]</p>
+<p>命令选项</p>
+<p>-a 显示活跃和非活跃内存</p>
+<p>-f 显示系统启动至今的fork数量</p>
+<p>-m 显示slabinfo</p>
+<p>-n 只在开始时显示一次字段名称</p>
+<p>-s 显示内存相关统计信息及多种系统活动数量</p>
+<p>delay 刷新时间间隔。如果不指定只显示一条结果</p>
+<p>count 刷新次数，如果不指定刷新次数，但指定了时间间隔则次数为无穷</p>
+<p>-d 显示磁盘相关统计信息</p>
+<p>-p 显示指定磁盘分区统计信息</p>
+<p>-S 使用指定单位显示，单位有k，K，m，M。默认为K</p>
+<p>示例</p>
+<p>1) 不加参数</p>
+<pre><code>root@debian:~# vmstat
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 0  0   3080  67748   9440 108576    0    0    34    11   15   30  0  0 99  1  0</code></pre><p>说明：</p>
+<p>Procs（进程）：</p>
+<p>r: 运行队列中进程数量</p>
+<p>b: 等待IO的进程数量</p>
+<p>Memory（内存）：</p>
+<p>swpd: 使用虚拟内存大小</p>
+<p>free: 可用内存大小</p>
+<p>buff: 用作缓冲的内存大小</p>
+<p>cache: 用作缓存的内存大小</p>
+<p>Swap：</p>
+<p>si: 每秒从交换区写到内存的大小</p>
+<p>so: 每秒写入交换区的内存大小</p>
+<p>IO：（现在的Linux版本块的大小为1024bytes）</p>
+<p>bi: 每秒读取的块数</p>
+<p>bo: 每秒写入的块数</p>
+<p>systemc：</p>
+<p>in: 每秒中断数，包括时钟中断。</p>
+<p>cs: 每秒上下文切换数。</p>
+<p>CPU（以百分比表示）：</p>
+<p>us: 用户进程执行时间(user time)</p>
+<p>sy: 系统进程执行时间(system time)</p>
+<p>id: 空闲时间(包括IO等待时间),中央处理器的空闲时间 。以百分比表示。</p>
+<p>wa: 等待IO时间</p>
+<p>如果 r经常大于 4 ，且id经常少于40，表示cpu的负荷很重。如果bi，bo 长期不等于0，表示内存不足。如果disk 经常不等于0， 且在 b中的队列 大于3， 表示 io性能不好。Linux在具有高稳定性、可靠性的同时，具有很好的可伸缩性和扩展性，能够针对不同的应用和硬件环境调整，优化出满足当前应用需要的最佳性能。因此企业在维护Linux系统、进行系统调优时，了解系统性能分析工具是至关重要的。</p>
+<p>2）指定刷新间隔和次数且单位换成M</p>
+<pre><code>root@debian:~# vmstat 5 5 -S M
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 0  0      3     33     29    118    0    0    34    10   16   37  0  0 99  1  0
+ 0  0      3     33     29    118    0    0     0     0   13   23  0  0 100  0  0
+ 0  0      3     33     29    118    0    0     0     0   14   24  0  0 100  0  0
+ 0  0      3     33     29    118    0    0     0     0   13   22  0  0 100  0  0
+ 0  0      3     33     29    118    0    0     0     0   12   19  0  0 100  0  0</code></pre><p>3）查看系统fork数量</p>
+<pre><code>root@debian:~# vmstat -f
+          928 forks</code></pre><p>4）查看内存使用的详细信息</p>
+<pre><code>root@debian:~# vmstat -s
+       226720 K total memory
+        41572 K used memory
+        89680 K active memory
+        49040 K inactive memory
+        33928 K free memory
+        30072 K buffer memory
+       121148 K swap cache
+      1046524 K total swap
+         3080 K used swap
+      1043444 K free swap
+          780 non-nice user cpu ticks
+            0 nice user cpu ticks
+          681 system cpu ticks
+       936078 idle cpu ticks
+         5379 IO-wait cpu ticks
+            0 IRQ cpu ticks
+           14 softirq cpu ticks
+           83 stolen cpu ticks
+       309795 pages paged in
+        93628 pages paged out
+          248 pages swapped in
+          796 pages swapped out
+       153866 interrupts
+       347505 CPU context switches
+   1569648735 boot time
+          929 forks</code></pre><p>这些数据来自于/proc/meminfo , /proc/stat , /proc/vmstat</p>
+<p>5）查看磁盘的读写</p>
+<pre><code>root@debian:~# vmstat -d
+disk- ------------reads------------ ------------writes----------- -----IO------
+       total merged sectors      ms  total merged sectors      ms    cur    sec
+vda    13506    109  619590  138858   2451   2724  187256  117260      0     40
+sr0        0      0       0       0      0      0       0       0      0      0</code></pre><p>6）查看/dev/vda1 的读写</p>
+<pre><code>root@debian:~# vmstat -p /dev/vda1
+vda1            reads      read sectors      writes  requested writes
+                13179            609378        1652            180888</code></pre><p>这些信息主要来自于/proc/diskstats。</p>
+<p>reads:来自于这个分区的读的次数。</p>
+<p>read sectors:来自于这个分区的读扇区的次数。</p>
+<p>writes:来自于这个分区的写的次数。</p>
+<p>requested writes:来自于这个分区的写请求次数。</p>
+]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>lsof</title>
+    <url>/2019/10/14/lsof/</url>
+    <content><![CDATA[<p>lsof (list open files)是一个列出当前系统打开文件的工具。在Linux环境下，任何事物都是以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络链接和硬件。所以如传输控制协议（tcp）和用户数据报协议（udp）套接字等，系统在后台为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序于基础操作系统之间的交互提供了通用的接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能查看这个列表对系统监测以及排错将是有很大帮助的。</p>
+<p>命令格式</p>
+<p>lsof [参数] [文件]</p>
+<p>命令功能</p>
+<p>用于查看进程打开的文件，端口。找回、恢复删除的文件。</p>
+<p>命令参数</p>
+<p>-a 列出打开文件存在的进程</p>
+<p>-c&lt;进程名&gt; 列出指定进程打开的文件</p>
+<p>-g 列出GID号进程详情</p>
+<p>+d&lt;目录&gt; 列出目录下被打开的文件</p>
+<p>+D&lt;目录&gt; 递归列出目录下被打开的文件</p>
+<p>-i 列出符合条件的进程（4、6、协议、端口、@ip）</p>
+<p>示例</p>
+<p>1) 不加参数</p>
+<pre><code>root@debian:~# lsof | head -n 20
+COMMAND   PID TID TASKCMD               USER   FD      TYPE     DEVICE SIZE/OFF       NODE NAME
+systemd     1                           root  cwd       DIR      254,1     4096          2 /
+systemd     1                           root  rtd       DIR      254,1     4096          2 /
+systemd     1                           root  txt       REG      254,1  1443404     662341 /usr/lib/systemd/systemd
+systemd     1                           root  mem       REG      254,1  1066528     656039 /usr/lib/i386-linux-gnu/libm-2.28.so
+systemd     1                           root  mem       REG      254,1   153068     659481 /usr/lib/i386-linux-gnu/libudev.so.1.6.13
+systemd     1                           root  mem       REG      254,1   144840     656311 /usr/lib/i386-linux-gnu/libgpg-error.so.0.26.1
+systemd     1                           root  mem       REG      254,1    46404     659376 /usr/lib/i386-linux-gnu/libjson-c.so.3.0.1
+systemd     1                           root  mem       REG      254,1    50568     659375 /usr/lib/i386-linux-gnu/libargon2.so.1
+systemd     1                           root  mem       REG      254,1   401416     656842 /usr/lib/i386-linux-gnu/libdevmapper.so.1.02.1
+systemd     1                           root  mem       REG      254,1    34192     658756 /usr/lib/i386-linux-gnu/libuuid.so.1.3.0
+systemd     1                           root  mem       REG      254,1    21812     655781 /usr/lib/i386-linux-gnu/libattr.so.1.1.2448
+systemd     1                           root  mem       REG      254,1  2868032     659391 /usr/lib/i386-linux-gnu/libcrypto.so.1.1
+systemd     1                           root  mem       REG      254,1   614756     659392 /usr/lib/i386-linux-gnu/libssl.so.1.1
+systemd     1                           root  mem       REG      254,1    26136     655697 /usr/lib/i386-linux-gnu/libcap-ng.so.0.0.0
+systemd     1                           root  mem       REG      254,1    17924     656038 /usr/lib/i386-linux-gnu/libdl-2.28.so
+systemd     1                           root  mem       REG      254,1   488784     655764 /usr/lib/i386-linux-gnu/libpcre.so.3.13.3
+systemd     1                           root  mem       REG      254,1   149124     656053 /usr/lib/i386-linux-gnu/libpthread-2.28.so
+systemd     1                           root  mem       REG      254,1   378732     657121 /usr/lib/i386-linux-gnu/libblkid.so.1.1.0
+systemd     1                           root  mem       REG      254,1   124444     656362 /usr/lib/i386-linux-gnu/liblz4.so.1.8.3</code></pre><p>说明：</p>
+<p>COMMAND：进程名称</p>
+<p>PID：进程标识符</p>
+<p>PPID：父进程标识符（需要指定-R参数）</p>
+<p>USER：进程所有者</p>
+<p>PGID：进程所属组</p>
+<p>FD：文件描述符，应用程序通过文件描述符识别该文件</p>
+<p>2）列出某个文件相关进程</p>
+<pre><code>root@debian:~# lsof /bin/bash
+COMMAND PID USER  FD   TYPE DEVICE SIZE/OFF   NODE NAME
+bash    452   ww txt    REG  254,1  1302248 656751 /usr/bin/bash
+bash    458 root txt    REG  254,1  1302248 656751 /usr/bin/bash</code></pre><p>3）列出某个进程打开的文件</p>
+<pre><code>COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAME
+bash    452   ww  cwd    DIR  254,1     4096 797082 /home/ww
+bash    452   ww  rtd    DIR  254,1     4096      2 /
+bash    452   ww  txt    REG  254,1  1302248 656751 /usr/bin/bash
+bash    452   ww  mem    REG  254,1    54908 656047 /usr/lib/i386-linux-gnu/libnss_files-2.28.so
+bash    452   ww  mem    REG  254,1    26400 658382 /usr/lib/i386-linux-gnu/gconv/gconv-modules.cache
+bash    452   ww  mem    REG  254,1  3246832 655804 /usr/lib/locale/locale-archive
+bash    452   ww  mem    REG  254,1  1947056 656036 /usr/lib/i386-linux-gnu/libc-2.28.so
+bash    452   ww  mem    REG  254,1    17924 656038 /usr/lib/i386-linux-gnu/libdl-2.28.so
+bash    452   ww  mem    REG  254,1   161928 656345 /usr/lib/i386-linux-gnu/libtinfo.so.6.1
+bash    452   ww  mem    REG  254,1   167244 655375 /usr/lib/i386-linux-gnu/ld-2.28.so
+bash    452   ww    0u   CHR  136,0      0t0      3 /dev/pts/0
+bash    452   ww    1u   CHR  136,0      0t0      3 /dev/pts/0
+bash    452   ww    2u   CHR  136,0      0t0      3 /dev/pts/0
+bash    452   ww  255u   CHR  136,0      0t0      3 /dev/pts/0
+bash    458 root  cwd    DIR  254,1     4096 917506 /root
+bash    458 root  rtd    DIR  254,1     4096      2 /
+bash    458 root  txt    REG  254,1  1302248 656751 /usr/bin/bash
+bash    458 root  mem    REG  254,1   149124 656053 /usr/lib/i386-linux-gnu/libpthread-2.28.so
+bash    458 root  mem    REG  254,1    38868 656055 /usr/lib/i386-linux-gnu/librt-2.28.so
+bash    458 root  mem    REG  254,1   285204 665107 /usr/lib/i386-linux-gnu/libnss_systemd.so.2
+bash    458 root  mem    REG  254,1    54908 656047 /usr/lib/i386-linux-gnu/libnss_files-2.28.so
+bash    458 root  mem    REG  254,1    26400 658382 /usr/lib/i386-linux-gnu/gconv/gconv-modules.cache
+bash    458 root  mem    REG  254,1  3246832 655804 /usr/lib/locale/locale-archive
+bash    458 root  mem    REG  254,1  1947056 656036 /usr/lib/i386-linux-gnu/libc-2.28.so
+bash    458 root  mem    REG  254,1    17924 656038 /usr/lib/i386-linux-gnu/libdl-2.28.so
+bash    458 root  mem    REG  254,1   161928 656345 /usr/lib/i386-linux-gnu/libtinfo.so.6.1
+bash    458 root  mem    REG  254,1   167244 655375 /usr/lib/i386-linux-gnu/ld-2.28.so
+bash    458 root    0u   CHR  136,0      0t0      3 /dev/pts/0
+bash    458 root    1u   CHR  136,0      0t0      3 /dev/pts/0
+bash    458 root    2u   CHR  136,0      0t0      3 /dev/pts/0
+bash    458 root  255u   CHR  136,0      0t0      3 /dev/pts/0</code></pre><p>4）列出打开某个端口的进程</p>
+<pre><code>root@debian:~# lsof -i :22
+COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+sshd    365 root    3u  IPv4  15176      0t0  TCP *:ssh (LISTEN)
+sshd    365 root    4u  IPv6  15187      0t0  TCP *:ssh (LISTEN)
+sshd    439 root    3u  IPv4  16512      0t0  TCP debian:ssh-&gt;192.168.122.1:41104 (ESTABLISHED)
+sshd    451   ww    3u  IPv4  16512      0t0  TCP debian:ssh-&gt;192.168.122.1:41104 (ESTABLISHED)</code></pre>]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>scp</title>
+    <url>/2019/10/14/scp/</url>
+    <content><![CDATA[<p>scp是secure copy的简写，用于在Linux下进行远程拷贝文件命令。它和cp类似，不过cp只能在本机进行拷贝。scp是加密的传输但是也会稍微影响速度。当你服务器硬盘变为只读read only system时，用scp可以帮你把文件移出来。另外，scp只占用很少的资源不会提法哦多少系统复核，在这一点上rsync就远不及它了。虽然rsync比scp会快一点，但当小文件众多的情况下，rsync会导致硬盘I/O非常高，而scp基本不影响系统正常使用。</p>
+<p>命令格式：</p>
+<p>scp [参数] [原路径] [目标路径]</p>
+<p>命令参数：</p>
+<p>-1 强制scp命令使用ssh1协议</p>
+<p>-2 强制scp命令使用shh2协议</p>
+<p>-4 强制scp命令使用ipv4</p>
+<p>-6 强制scp命令使用ipv6</p>
+<p>-B 使用批处理模式（避免重复询问口令）</p>
+<p>-C 允许压缩（将-C标志传递给ssh，从而打开压缩功能）</p>
+<p>-p 保留源文件的修改时间，访问时间和访问权限</p>
+<p>-q 不显示传输进度条</p>
+<p>-r 递归复制整个目录</p>
+<p>-P port 指定数据传输用的端口</p>
+<p>-i identity_file 指定传输使用的秘钥文件</p>
+<p>示例：</p>
+<p>1)复制文件</p>
+<pre><code># ww @ way-archlinux in ~ [8:37:42]
+$ touch ww
+
+# ww @ way-archlinux in ~ [8:37:53]
+$ scp ww ww@192.168.122.70:/tmp
+ww@192.168.122.70&apos;s password:
+ww                                            100%    0     0.0KB/s   00:00</code></pre>]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kill</title>
+    <url>/2019/10/14/kill/</url>
+    <content><![CDATA[<p>Linux中的kill命令用来终止指定的进程，是Linux下常用的进程管理命令。通常可以用CTRL+C终止一个前台命令，但是对于一个后台进程就必须使用kill命令来终止，我们可以使用ps/pidof/pstree/top等工具获取进程PID，然后使用kill命令来杀掉该进程。kill命令通常是向进程发送指定的信号来结束进程的。在默认情况下，采用编号为15的TERM信号。TERM信号将终止所有不能捕获该信号的进程。对于那些不能捕获该信号的进程就要用编号为9的kill信号强行杀掉该进程。</p>
+<p>命令格式：</p>
+<pre><code>kill [参数] [进程号]</code></pre><p>命令功能：</p>
+<pre><code>发送指定的信号到指定的进程。不指定信号将默认发送SIGTERM（15）信号终止指定进程。如果任然无法终止改程序可用“-kill”参数，即发送SIGKILL（9）信号强制结束进程。其中非root用户只能影响自己的进程。</code></pre><p>命令参数：</p>
+<pre><code>-l 列出支持的全部信号名称
+
+-a 处理进程时，不限制命令名和进程号的对应关系
+
+-p 只打印相关进程号不发送任何信号
+
+-s 指定发送信号
+
+-u 指定用户</code></pre><ul>
+<li>killall [参数] [进程名] 结束同名的所有进程，-I忽略大小写</li>
+</ul>
+<p>** 应注意，信号使进程强行终止，这常会带来一些副作用，如数据丢失或者终端无法恢复到正常状态。发送信号时必须小心，只有在万不得已时，才用kill信号(9)，因为进程不能首先捕获它。要撤销所有的后台作业，可以输入kill 0。因为有些在后台运行的命令会启动多个进程，跟踪并找到所有要杀掉的进程的PID是件很麻烦的事。这时，使用kill 0来终止所有由当前shell启动的进程，是个有效的方法。**</p>
+<p>示例：</p>
+<p>查看kill支持使用的所有信号</p>
+<pre><code>ww@debian:~$ kill -l
+ 1) SIGHUP     2) SIGINT     3) SIGQUIT     4) SIGILL     5) SIGTRAP
+ 6) SIGABRT     7) SIGBUS     8) SIGFPE     9) SIGKILL    10) SIGUSR1
+11) SIGSEGV    12) SIGUSR2    13) SIGPIPE    14) SIGALRM    15) SIGTERM
+16) SIGSTKFLT    17) SIGCHLD    18) SIGCONT    19) SIGSTOP    20) SIGTSTP
+21) SIGTTIN    22) SIGTTOU    23) SIGURG    24) SIGXCPU    25) SIGXFSZ
+26) SIGVTALRM    27) SIGPROF    28) SIGWINCH    29) SIGIO    30) SIGPWR
+31) SIGSYS    34) SIGRTMIN    35) SIGRTMIN+1    36) SIGRTMIN+2    37) SIGRTMIN+3
+38) SIGRTMIN+4    39) SIGRTMIN+5    40) SIGRTMIN+6    41) SIGRTMIN+7    42) SIGRTMIN+8
+43) SIGRTMIN+9    44) SIGRTMIN+10    45) SIGRTMIN+11    46) SIGRTMIN+12    47) SIGRTMIN+13
+48) SIGRTMIN+14    49) SIGRTMIN+15    50) SIGRTMAX-14    51) SIGRTMAX-13    52) SIGRTMAX-12
+53) SIGRTMAX-11    54) SIGRTMAX-10    55) SIGRTMAX-9    56) SIGRTMAX-8    57) SIGRTMAX-7
+58) SIGRTMAX-6    59) SIGRTMAX-5    60) SIGRTMAX-4    61) SIGRTMAX-3    62) SIGRTMAX-2
+63) SIGRTMAX-1    64) SIGRTMAX</code></pre><p>常见的信号有</p>
+<pre><code>HUP     1    终端断线
+
+INT     2    中断（同 Ctrl + C）
+
+QUIT    3    退出（同 Ctrl + \）
+
+TERM   15    终止
+
+KILL    9    强制终止
+
+CONT   18    继续（与STOP相反， fg/bg命令）
+
+STOP   19    暂停（同 Ctrl + Z）</code></pre><p>kill默认无法杀死2324进程，使用-9选项强制杀死</p>
+<pre><code>ww@debian:~$ ps -ef | grep vim
+root      1990  1897  0 12:30 pts/0    00:00:00 vim /etc/mysql/my.cnf.fallback
+ww        2324  2006  1 12:37 pts/0    00:00:00 vim test/ss
+ww        2335  2006  0 12:37 pts/0    00:00:00 grep vim
+ww@debian:~$ kill 2324
+ww@debian:~$ ps -ef | grep vim
+root      1990  1897  0 12:30 pts/0    00:00:00 vim /etc/mysql/my.cnf.fallback
+ww        2324  2006  0 12:37 pts/0    00:00:00 vim test/ss
+ww        2349  2006  0 12:37 pts/0    00:00:00 grep vim
+ww@debian:~$ kill -9 2324
+ww@debian:~$ ps -ef | grep vim
+root      1990  1897  0 12:30 pts/0    00:00:00 vim /etc/mysql/my.cnf.fallback
+ww        2354  2006  0 12:37 pts/0    00:00:00 grep vim
+[1]+  已杀死               vim test/ss
+ww@debian:~$ ps -ef | grep vim
+root      1990  1897  0 12:30 pts/0    00:00:00 vim /etc/mysql/my.cnf.fallback
+ww        2362  2006  0 12:37 pts/0    00:00:00 grep vim</code></pre>]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>find</title>
+    <url>/2019/10/14/find/</url>
+    <content><![CDATA[<p>Linux下find命令在目录结构中搜索文件，并执行指定的操作。Linux下find命令提供了相当多的查找条件，功能很强大。由于find具有强大的功能，所以它的选项也很多，其中大部分选项都值得我们花时间来了解一下。即使系统中含有网络文件系统( NFS)，find命令在该文件系统中同样有效，只你具有相应的权限。 在运行一个非常消耗资源的find命令时，很多人都倾向于把它放在后台执行，因为遍历一个大的文件系统可能会花费很长的时间(这里是指30G字节以上的文件系统)</p>
+<p>1.命令格式</p>
+<p>find [path] [options]</p>
+<p>2.命令功能</p>
+<p>用于查找文件，常见于查找文件名，指定访问和修改时间内的文件等操作。</p>
+<p>3.命令参数</p>
+<p>pathname: 查找的目录路径，默认为当前目录。</p>
+<p>-print： 将匹配到的文件输出到标准输出。</p>
+<p>-exec： 对匹配到的文件执行该参数给出的shell命令： -exec ls -l {} \ ;</p>
+<p>-ok: 作用同exec只是更安全的在执行每一条命令之前请求确认</p>
+<p>4.命令选项：</p>
+<p>-name 按照文件名查找文件，可使用shell匹配</p>
+<p>-perm 按照文件权限查找文件 -perm 777</p>
+<p>-type 查找指定的文件类型：</p>
+<pre><code>b   块设备文件
+
+d   目录
+
+c   字符设备文件
+
+p   管道文件
+
+l   符号链接文件
+
+f   普通文件</code></pre><p>-size 查找指定文件大小 +1k 大于1k的文件 -1k 小于1k的文件</p>
+<p>-amin n 最后n分钟访问的文件（距离当前时间n的第n分钟，下同）</p>
+<p>-atime 最后n天访问的文件</p>
+<p>-cmin 最后n分钟修改文件状态的文件（状态指文件是否修改，mode，ownership，链接数等）</p>
+<p>-ctime 最后n天修改文件状态的文件</p>
+<p>-mmin 最后n分钟修改文件数据的文件</p>
+<p>-mtime n 最后n天那一天修改文件数据的文件</p>
+<p>-mtime +n n 天前（不包含n天本身）被修改过的文件</p>
+<p>-mtime -n n 天之内（包含n天本身）被修改过的文件</p>
+<p>-user 按照文件属主查找</p>
+<p>-nouser 查找无效属主文件</p>
+<p>-nogroup 查找无效属组文件</p>
+<p>-group 按照文件属组查找</p>
+<p>-prune 指定不查找的目录</p>
+<p>-maxdepth 在指定路径下查找文件的最深目录层次（紧接在路径后） 1 表示在指定目录下查找不递归</p>
+<p>4.示例</p>
+<p>查找指定大小的文件</p>
+<pre><code>ww@debian:~/test$ ll -h
+总用量 8.0K
+-rwxr-xr-x 1 ww   ww   1.6K 9月  23 08:38 debian-start
+-rw-r--r-- 1 root root 1.0K 9月  23 10:08 kb
+-rw-r--r-- 1 root root    0 9月  23 10:06 ss
+ww@debian:~/test$ find /home/ww/test/ -size +1k
+/home/ww/test/
+/home/ww/test/debian-start
+ww@debian:~/test$ find /home/ww/test/ -size -1k
+/home/ww/test/ss
+ww@debian:~/test$ find /home/ww/test/ -size 1k
+/home/ww/test/kb</code></pre><p>匹配包含特定字符文件名的文件，并且递归目录查询</p>
+<pre><code>root@debian:~# ll /etc/mysql/
+总用量 24
+drwxr-xr-x 2 root root 4096 9月  15 12:50 conf.d
+-rw------- 1 root root  277 9月  17 13:13 debian.cnf
+-rwxr-xr-x 1 root root 1620 8月   4 02:44 debian-start
+-rw-r--r-- 1 root root  869 8月   4 02:44 mariadb.cnf
+drwxr-xr-x 2 root root 4096 9月  17 13:21 mariadb.conf.d
+lrwxrwxrwx 1 root root   24 9月  15 12:50 my.cnf -&gt; /etc/alternatives/my.cnf
+-rw-r--r-- 1 root root  839 8月   3  2016 my.cnf.fallback
+root@debian:~# find /etc/mysql/ -name &quot;*cnf*&quot; -type f -exec ls -l {} \;
+-rw-r--r-- 1 root root 55 8月   3  2016 /etc/mysql/conf.d/mysqldump.cnf
+-rw-r--r-- 1 root root 8 8月   3  2016 /etc/mysql/conf.d/mysql.cnf
+-rw-r--r-- 1 root root 336 8月   4 02:44 /etc/mysql/mariadb.conf.d/50-mysql-clients.cnf
+-rw-r--r-- 1 root root 3904 9月  17 13:21 /etc/mysql/mariadb.conf.d/50-server.cnf
+-rw-r--r-- 1 root root 733 8月   4 02:44 /etc/mysql/mariadb.conf.d/50-client.cnf
+-rw-r--r-- 1 root root 1032 8月   4 02:44 /etc/mysql/mariadb.conf.d/50-mysqld_safe.cnf
+-rw-r--r-- 1 root root 839 8月   3  2016 /etc/mysql/my.cnf.fallback
+-rw-r--r-- 1 root root 869 8月   4 02:44 /etc/mysql/mariadb.cnf
+-rw------- 1 root root 277 9月  17 13:13 /etc/mysql/debian.cn</code></pre><p>只在指定目录下查找不递归</p>
+<pre><code>root@debian:~# find /etc/mysql/ -maxdepth 1 -name &quot;*cnf*&quot; -type f -exec ls -l {} \;
+-rw-r--r-- 1 root root 839 8月   3  2016 /etc/mysql/my.cnf.fallback
+-rw-r--r-- 1 root root 869 8月   4 02:44 /etc/mysql/mariadb.cnf
+-rw------- 1 root root 277 9月  17 13:13 /etc/mysql/debian.cnf</code></pre><p>查找俩天前创建的文件并询问是否删除</p>
+<pre><code>root@debian:~# ll /var/log/mysql/
+总用量 16
+-rw-r----- 1 mysql adm 1892 9月  23 08:13 error.log
+-rw-r----- 1 mysql adm 1136 9月  22 23:07 error.log.1.gz
+-rw-r----- 1 mysql adm 1572 9月  20 14:57 error.log.2.gz
+-rw-rw---- 1 mysql adm 1598 9月  19 17:09 error.log.3.gz
+root@debian:~# date
+2019年 09月 23日 星期一 10:58:43 CST
+root@debian:~# find /var/log/mysql/ -mtime +3 -ok rm {} \;
+root@debian:~# find /var/log/mysql/ -mtime +2 -ok rm {} \;
+&lt; rm ... /var/log/mysql/error.log.3.gz &gt; ? y</code></pre>]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>cp</title>
+    <url>/2019/10/14/cp/</url>
+    <content><![CDATA[<p>cp 命令用来复制文件或者目录，是Linux 系统中最常用的命令之一。一般情况下，shell会设置一个别名，在命令行下复制文件时，如果目标文件已经存在，就会询问是否覆盖，不管你是否使用了参数 -i 。但是如果在 shell 脚本中执行 cp 时，没有 -i 参数时不会询问是否覆盖。这说明命令行和 shell 脚本的执行方式是略有不同的。</p>
+<p>命令格式    </p>
+<pre><code>cp [选项] [-T] 源 目的</code></pre><p>命令功能</p>
+<pre><code>将源文件复制至目标文件或者将多个源文件复制到目的目录中。</code></pre><p>命令行参数</p>
+<pre><code>-a， 此选项通常在复制目录是使用，它保留链接、文件属性并复制目录下的所有内容。
+
+-d， 复制时保留链接。
+
+-f， 覆盖已经存在的目标文件且不给出提示。
+
+-i， 在覆盖目标文件之前给出提示，要求用户确认是否覆盖（y/n）
+
+-p， 复制内容包括所有属性：mode ownership timestamps
+
+–preserve[=ATTR_LIST] 默认参数和 -p 一样，可选参数还有：context links xattr all
+
+–no-preserver[=ATTR_LIST] 不保留指定的属性
+
+-r， 若给出的源文件是一个目录文件，此时将复制目录下所有的子目录和文件。
+
+-l， 不复制文件只是生成硬链接。
+
+-s， 不复制文件只生成软链接。
+
+-u， 仅在源文件比目标文件新或者目标文件不存在的情况下复制
+
+-t， 接目录名，将多个源文件复制到指定目录中</code></pre><p>示例</p>
+<p>1.不加参数在有权限复制的情况下属主（ownership）和时间戳（timestamps）均改变</p>
+<pre><code>ww@debian:~/test$ ll /etc/mysql/
+总用量 24
+drwxr-xr-x 2 root root 4096 9月  15 12:50 conf.d
+-rw------- 1 root root  277 9月  17 13:13 debian.cnf
+-rwxr-xr-x 1 root root 1620 8月   4 02:44 debian-start
+-rw-r--r-- 1 root root  869 8月   4 02:44 mariadb.cnf
+drwxr-xr-x 2 root root 4096 9月  17 13:21 mariadb.conf.d
+lrwxrwxrwx 1 root root   24 9月  15 12:50 my.cnf -&gt; /etc/alternatives/my.cnf
+-rw-r--r-- 1 root root  839 8月   3  2016 my.cnf.fallback
+ww@debian:~/test$ cp /etc/mysql/debian-start /home/ww/test/
+ww@debian:~/test$ ll
+总用量 4
+-rwxr-xr-x 1 ww ww 1620 9月  22 22:19 debian-start</code></pre><p>2.选项-p 会保留源文件的属主和时间戳属性，但这里属主没有改变的原因是普通用户没法创建root文件</p>
+<pre><code>ww@debian:~/test$ cp -p /etc/mysql/debian-start /home/ww/test/
+ww@debian:~/test$ ll
+总用量 4
+-rwxr-xr-x 1 ww ww 1620 8月   4 02:44 debian-start</code></pre><p>3.当root用户使用-p选项时完整的保留了源文件的所有属性</p>
+<pre><code>root@debian:~# cp -p /home/ww/test/debian-start /root/
+root@debian:~# ll
+总用量 8
+-rwxr-xr-x 1 ww   ww   1620 8月   4 02:44 debian-start
+drwxr-xr-x 2 root root 4096 9月  17 14:46 frp</code></pre><p>4.保留属主不变，时间戳变了</p>
+<pre><code>root@debian:~# cp --preserve=ownership /home/ww/test/debian-start /root/
+root@debian:~# ll
+总用量 8
+-rwxr-xr-x 1 ww   ww   1620 9月  22 22:37 debian-start
+drwxr-xr-x 2 root root 4096 9月  17 14:46 frp</code></pre><p>结束</p>
+]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>wget</title>
+    <url>/2019/10/14/wget/</url>
+    <content><![CDATA[<p>wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。</p>
+<p>命令格式：</p>
+<p>wget [参数] [URL地址]</p>
+<p>命令参数：</p>
+<p>-h, -help 打印语法帮助</p>
+<p>-b, -background 启动后转入后台执行</p>
+<p>-O, –output-document=FILE 命名下载后的文件（大写的O）</p>
+<p>-c, –continue 接着下载没有下载完成的文件，断点续传</p>
+<p>-P, –directory-prefix=PREFIX 指定下载目录</p>
+<p>-i, –input-file=FILE 参数后接FILE中每一行是一个URL</p>
+]]></content>
+      <categories>
+        <category>COMMAND</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo 部署出现 permission denied</title>
+    <url>/2019/10/14/Hexo-%E9%83%A8%E7%BD%B2%E5%87%BA%E7%8E%B0-permission-denied/</url>
+    <content><![CDATA[<p>具体错误：</p>
+<p>Error: EACCES: permission denied, unlink</p>
+<p>解决：</p>
+<p>rm -rf ./deploy_git     </p>
+<p>hexo clean       </p>
+<p>hexo g       </p>
+<p>hexo d</p>
+]]></content>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>centos7安装MySQL</title>
+    <url>/2019/10/14/centos7%E5%AE%89%E8%A3%85MySQL/</url>
+    <content><![CDATA[<p>1 下载MySQL的repo源</p>
+<p>wget <a href="http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" target="_blank" rel="noopener">http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm</a></p>
+<p>2 安装下载的RPM包</p>
+<p>sudo rpm -ivh mysql-community-release-el7-5.noarch.rpm</p>
+<p>3 安装这个包后会使用俩个mysql的yum repo源</p>
+<p>4 安装MySQL</p>
+<p>sudo yum install mysql-server</p>
+<p>5 完成。</p>
+]]></content>
+      <categories>
+        <category>service</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu18.04更换中科大arm源</title>
+    <url>/2019/10/14/ubuntu18-04%E6%9B%B4%E6%8D%A2%E4%B8%AD%E7%A7%91%E5%A4%A7arm%E6%BA%90/</url>
+    <content><![CDATA[<p>我之前在小米Max上通过linuxdeploy安装aarch64架构的ubuntu18.04之后，使用默认的软件源速度很慢，于是就更换了中科大的源</p>
+<p>更换方法：</p>
+<p>以root身份打开 /etc/apt/sources.list ，至于用什么打开随意</p>
+<p>将 <a href="http://ports.ubuntu.com/" target="_blank" rel="noopener">http://ports.ubuntu.com/</a> 全部替换为 <a href="http://mirrors.ustc.edu.cn/ubuntu-ports/" target="_blank" rel="noopener">http://mirrors.ustc.edu.cn/ubuntu-ports/</a></p>
+<p>更换中科大arm源给出的示例是ubuntu16.04,所以我们还需要把 xenial 替换成 bionic</p>
+<p>执行 sudo apt-get update 和 sudo apt-get upgrade 测试完成</p>
+]]></content>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zsh使用通配符</title>
+    <url>/2019/10/14/zsh%E4%BD%BF%E7%94%A8%E9%80%9A%E9%85%8D%E7%AC%A6/</url>
+    <content><![CDATA[<p>默认情况下 zsh 是不支持通配符 * 匹配的</p>
+<p>添加下面一条命令到~/.zshrc中即可：</p>
+<p>set nonomatch</p>
+<p>然后重启或者执行</p>
+<p>source ~/.zshrc</p>
+]]></content>
+      <categories>
+        <category>archlinux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Failed to receive socks4 connect request ack</title>
+    <url>/2019/10/14/Failed-to-receive-socks4-connect-request-ack/</url>
+    <content><![CDATA[<p>因为我的 archlinux 开启了 socks5 代理，所以在执行 git clone 命令时出现题示错误</p>
+<p>解决办法</p>
+<p><code>git config --global http.proxy &#39;socks5://127.0.0.1:1080&#39;</code></p>
+]]></content>
+      <categories>
+        <category>archlinux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>双系统win10更新后无法进入Linux</title>
+    <url>/2019/10/14/%E5%8F%8C%E7%B3%BB%E7%BB%9Fwin10%E6%9B%B4%E6%96%B0%E5%90%8E%E6%97%A0%E6%B3%95%E8%BF%9B%E5%85%A5Linux/</url>
+    <content><![CDATA[<p>我的笔记本上安装了win10和archlinux双系统，更新win10 1809后只能进入win10了（跳过grub直接进入win10，就像win10单系统一样）</p>
+<p>估计是win10大更之后直接覆盖了grub内容</p>
+<p>解决方法是通过archlinux的U盘启动盘重写grub</p>
+<p>具体内容如下：</p>
+<p>一、 制作archlinuxU盘启动盘</p>
+<p>　　很简单就是把archlinux的镜像写入U盘就行</p>
+<p>二、 进入arch-chroot</p>
+<p>　　这也和安装archlinux时一样的操作，把U盘插到电脑上，用U盘进行引导，然后选择第一项进入；</p>
+<p>　　使用命令 lsblk 查看你的磁盘分区，找到自己的 /分区和 /boot分区 挂载，例如：</p>
+<p>　　mount /dev/sda/mnt #sda这里指的是你的磁盘 / 分区对应的实际名称，如sda7</p>
+<p>　　mount /dev/sda* /mnt/boot #sda*这里指的是你的磁盘 /boot 分区对应的实际名称，如sda2</p>
+<p>　　接下来使用命令进入arch-chroot</p>
+<p>　　arch-chroot /mnt</p>
+<p>三、 重新安装grub</p>
+<p>　　grub-install –target=x86_64-efi –efi-directory=/boot –bootloader-id=grub –recheck</p>
+<p>　　安装成功后会显示</p>
+<p>　　Installation finished. No error reported.</p>
+<p>四、 生成配置文件</p>
+<p>　　grub-mkconfig -o /boot/grub/grub.cfg</p>
+<p>　　执行上面的命令后会有 vmlinuz 和 windows 条目相关的字眼出现，这时引导就已经修复完成重启电脑之后就能正常双系统引导了（如果执行完上面的命令没有windows相关的信息出现，也不用担心，重启电脑后再次进入arch-chroot执行上述命令就好）</p>
+<p>End</p>
+]]></content>
+      <categories>
+        <category>archlinux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>samb文件服务器</title>
+    <url>/2019/10/14/samb%E6%96%87%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<p>软件包</p>
+<p>####centos</p>
+<ul>
+<li><p>samba</p>
+</li>
+<li><p>samba-client</p>
+</li>
+<li><p>samba-common</p>
+</li>
+</ul>
+<p>####debian</p>
+<ul>
+<li><p>samba</p>
+</li>
+<li><p>samba-client</p>
+</li>
+<li><p>samba-common</p>
+</li>
+</ul>
+<p>守护进程</p>
+<p>smb（smbd）</p>
+<p>提供文件共享和打印机共享</p>
+<p>提供用户权限的认证和解锁</p>
+<p>tcp 139 445</p>
+<p>nmb（nmbd）</p>
+<p>提供NETBIOS名称解析服务</p>
+<p>Common Internet File System （cifs） mount.cifs 由cifs-utils包提供</p>
+<p>udp 137</p>
+<p>快速配置</p>
+<p>服务端</p>
+<p>安装Samba软件包</p>
+<p>创建共享目录</p>
+<p>修改配置文件（/etc/samba/smb.conf) debian上的配置文件是/etc/smb.conf</p>
+<p>vim /etc/samba/smb.conf</p>
+<figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">[share] <span class="comment">#共享名称</span></span><br><span class="line">comment = share for mysel <span class="comment">#共享描述</span></span><br><span class="line">path = /common <span class="comment">#之前创建的共享目录</span></span><br><span class="line">browseable = YES <span class="comment">#所有人可见</span></span><br><span class="line">guest ok = NO <span class="comment">#拒绝匿名用户访问</span></span><br><span class="line">writable = YES <span class="comment">#数据可写</span></span><br></pre></td></tr></table></figure>
+
+<p>修改selinux上下文权限(可能会需要在selinux是enforcing状态下修改)</p>
+<p>chcon -t samba_share_t /common</p>
+<p>创建Samba共享访问账户</p>
+<p>useradd -s /sbin/nologin harry</p>
+<p>smbpasswd -a harry</p>
+<p>-a 添加Samba账户并设置密码</p>
+<p>-x 删除Samba用户</p>
+<p>-d 禁用Samba账户</p>
+<p>-e 启用Samba账户</p>
+<p>启动服务</p>
+<p>systemctl restart smb nmb</p>
+<p>systemctl enable smb nmb</p>
+<p>设置防火墙</p>
+<p>firewall-cmd –permanent –add-service=samba</p>
+<p>firewall-cmd –reload</p>
+<p>setenforce 0 (或者vim /etc/selinux/config设置为disable并重启)</p>
+<p>客户端</p>
+<p>Windows开启网络映射方便使用</p>
+<p>Linux桌面客户端同样容易连接</p>
+<p>Android使用es文件浏览器访问</p>
+<p>Linux 命令行：</p>
+<p>登录：smbclient -U harry //192.168.x.x /common</p>
+<p>挂载：yum install cifs-utils</p>
+<p>mount.cifs //192.168.x.x  /common /mnt/smbshare -o user=harry</p>
+]]></content>
+      <categories>
+        <category>service</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ubuntu18.04搭建nextcloud</title>
+    <url>/2019/10/14/ubuntu18-04%E6%90%AD%E5%BB%BAnextcloud/</url>
+    <content><![CDATA[<p>nextcloud 是目前开源社区最火的云项目，是个人云存储最理想的选择</p>
+<p>手中正好有一部媳妇淘汰的小米MAX（骁龙650 + 32G + 4850mAh）电池性能任然很好，开 WiFi 跑 ubuntu 大概可用六天，于是开始了手动搭建私有云盘</p>
+<p>材料：</p>
+<ul>
+<li>MI MAX （Root + MIUI10.2）</li>
+<li>linuxdeploy（安卓跑linux的软件需要完全root）</li>
+<li>busybox （linuxdeploy支持包）</li>
+<li>ubuntu18.04 （armhf）</li>
+<li>nextcloud16.03</li>
+<li>php 7.2.6</li>
+<li>apache2</li>
+<li>mariadb 10.1</li>
+</ul>
+<p>本文仅介绍 ubuntu18.04 下搭建 nextcloud 16.03 全过程，不涉及手机 Root 及 ubuntu 的安装，有兴趣可自行了解。</p>
+<p>第一步：安装 Apache2</p>
+<p>nextcloud 需要一个 web 服务器，这里选用的 web 服务器是 Apache2。通过运行以下命令安装：</p>
+<p>sudo apt-get update</p>
+<p>sudo apt-get install apache2</p>
+<p>安装 Apache2 后，运行以下命令禁用目录列表。</p>
+<p>sudo sed -i “s/Options Indexes FollowSymLinks/Options FollowSymLinks/“ /etc/apache2/apache2.conf</p>
+<p>启动 Apache2 服务</p>
+<p>sudo systemctl restart apache2</p>
+<p>第二步：安装 mariadb</p>
+<p>NextCloud还需要一个数据库服务器…… MariaDB数据库服务器是一个很好的选择。运行以下命令安装</p>
+<p>sudo apt install mariadb-server mariadb-client</p>
+<p>启动 mariadb 服务</p>
+<p>sudo systemctl rsetart mysql</p>
+<p>之后运行以下命令为 mariadb 设置安全模块</p>
+<p>sudo mysql_secure_installation</p>
+<p>出现提示是，按照以下输入。</p>
+<p>Enter current password for root (enter for none): Enter</p>
+<p>Set root password? [Y/n]:Y</p>
+<p>New password: Enter password</p>
+<p>Re-enter new password: Repeat password</p>
+<p>Remove anonymous users? [Y/n]: Y</p>
+<p>Disallow root login remotely? [Y/n]: Y</p>
+<p>Remove test database and access to it? [Y/n]: Y</p>
+<p>Reload privilege tables now? [Y/n]: Y</p>
+<p>设置远程访问</p>
+<p>sudo vim /etc/mysql/my.cnf (不同版本位置不完全相同，亦可能为/etc/mysql/mariadb.conf.d/50-server.cnf)</p>
+<p>删除 bind-address = 127.0.0.1 这一行</p>
+<p>保存退出</p>
+<p>重启 mariadb 服务</p>
+<p>sudo systemctl restart mysql</p>
+<p>第三步：安装 PHP 及相关模块</p>
+<p>sudo apt install php7.2 libapache2-mod-php7.2 php7.2-common php7.2-mbstring php7.2-xmlrpc php7.2-soap php7.2-apcu php7.2-smbclient php7.2-ldap php7.2-redis php7.2-gd php7.2-xml php7.2-intl php7.2-json php7.2-imagick php7.2-mysql php7.2-cli php7.2-mcrypt php7.2-ldap php7.2-zip php7.2-curl</p>
+<p>** sudo apt install php7.2***</p>
+<p>安装 php 后，运行以下命令打开 FPM PHP 默认文件</p>
+<p>sudo vim /etc/php7.2/apache2/php.ini</p>
+<p>修改以下内容并保存</p>
+<p>file_uploads = On</p>
+<p>allow_url_fopen = On</p>
+<p>memory_limit = 256M</p>
+<p>upload_max_filesize = 100M</p>
+<p>display_errors = Off</p>
+<p>第四步：创建 nextcloud 数据库</p>
+<p>登录 mariadb 服务器</p>
+<p>sudo mysql -uroot -p</p>
+<p>创建 nextcloud 数据库</p>
+<p>create database nextcloud;</p>
+<p>创建 nextclouduser 用户</p>
+<p>CREATE USER ‘nextclouduser’@’localhost’ IDENTIFIED BY ‘new_password_here’;</p>
+<p>赋予新建的用户对数据库完全访问权限</p>
+<p>GRANT ALL ON nextcloud.* TO ‘nextclouduser’@’localhost’ IDENTIFIED BY ‘user_password_here’ WITH GRANT OPTION;</p>
+<p>最后保存退出</p>
+<p>FLUSH PRIVILEGES;</p>
+<p>exit;</p>
+<p>第五步：下载 nextcloud16.03</p>
+<p>wget <a href="https://download.nextcloud.com/server/releases/nextcloud-16.0.3.zip" target="_blank" rel="noopener">https://download.nextcloud.com/server/releases/nextcloud-16.0.3.zip</a></p>
+<p>解压后移动到 Apache2 根目录下</p>
+<p>unzip nextcloud-16.0.3.zip;sudo mv nextcloud /var/www/html/nextcloud</p>
+<p>为 nextcloud 目录设置正确的权限</p>
+<p>sudo chown -R www-data:www-data /var/www/html/nextcloud/</p>
+<p>sudo chmod -R 755 /var/www/html/nextcloud/</p>
+<p>第六步：配置 Apache2</p>
+<p>为 nextcloud 配置 Apache2 站点配置文件。此文件用于控制用户访问 nextcloud 内容的方式。</p>
+<p>sudo vim /etc/apache2/sites-avaiable/nextcloud.conf</p>
+<p>将以下内容粘贴保存到 nextcloud.conf 中</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></span><br><span class="line">     <span class="attribute">ServerAdmin</span> admin@example.com</span><br><span class="line">     <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> /var/www/html/nextcloud/</span><br><span class="line">     <span class="attribute"><span class="nomarkup">ServerName</span></span> example.com</span><br><span class="line">     <span class="attribute">ServerAlias</span> www.example.com</span><br><span class="line">     <span class="attribute">Alias</span> /nextcloud <span class="string">"/var/www/html/nextcloud/"</span></span><br><span class="line">     <span class="section">&lt;Directory /var/www/html/nextcloud/&gt;</span></span><br><span class="line">        <span class="attribute"><span class="nomarkup">Options</span></span> +FollowSymlinks</span><br><span class="line">        <span class="attribute">AllowOverride</span> <span class="literal">All</span></span><br><span class="line">        <span class="attribute">Require</span> <span class="literal">all</span> granted</span><br><span class="line">          <span class="section">&lt;IfModule mod_dav.c&gt;</span></span><br><span class="line">            <span class="attribute">Dav</span> <span class="literal">off</span></span><br><span class="line">          <span class="section">&lt;/IfModule&gt;</span></span><br><span class="line">        <span class="attribute"><span class="nomarkup">SetEnv</span></span> HOME /var/www/html/nextcloud</span><br><span class="line">        <span class="attribute"><span class="nomarkup">SetEnv</span></span> HTTP_HOME /var/www/html/nextcloud</span><br><span class="line">     <span class="section">&lt;/Directory&gt;</span></span><br><span class="line">     <span class="attribute">ErrorLog</span> <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">     <span class="attribute">CustomLog</span> <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"><span class="section">&lt;/VirtualHost&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>保存后退出</p>
+<p>链接子目录配置文件</p>
+<p>sudo ln -s /etc/apache2/sites-available/nextcloud.conf /etc/apache2/sites-enabled/nextcloud.conf</p>
+<p>更改网站默认目录</p>
+<p>sudo vim /etc/apache2/sites-available/000-default.conf</p>
+<p>修改以下内容</p>
+<p>DocumentRoot /var/www/html/nextcloud</p>
+<p>添加模块</p>
+<p>sudo a2ensite nextcloud.conf</p>
+<p>sudo a2enmod rewrite</p>
+<p>sudo a2enmod headers</p>
+<p>sudo a2enmod env</p>
+<p>sudo a2enmod dir</p>
+<p>sudo a2enmod mime<br>重启 Apache2</p>
+<p>sudo systemctl restart apache2</p>
+<p>第七步：初始化 nextcloud<br>浏览器输入</p>
+<p>http://服务器IP</p>
+<p>可以访问到 nextcloud 设置页面。使用刚才创建的信息链接到数据库即可完成。</p>
+<p>稍等俩分钟后安装完成</p>
+<p>finish</p>
+<p>Now all the well !</p>
+<p>任务完成 ！</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>linuxdeploy无法启动MySQL</title>
+    <url>/2019/10/14/linuxdeploy%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8MySQL/</url>
+    <content><![CDATA[<p>关于安卓系统 Root 之后使用 linuxdeploy 的 chroot 环境中无法启动 MySQL</p>
+<p>首先一部完全 Root 后的安卓手机在使用 linuxdeploy 安装 linux 环境时推荐使用 debian 系的发行版，不要用 centos 因为 centos 无法使用 service 和 systemctl 命令来管理服务。</p>
+<p>在 linuxdeploy 上的 debian9 无法启动MySQL 尝试多种方法依然没法解决，然后重新安装 ubuntu18.04 后依然启动不了，查阅资料后发现安卓手机内核使用了 CONFIG_ANDROID_PARANDOID_NETWORK 编译过导致无法正常使用 linux 上的服务。</p>
+<p>解决 MySQL 无法启动也很简单，运行以下命令即可</p>
+<p>usermod -a -G aid_inet,aid_net_raw mysql</p>
+<p>su mysql</p>
+<p>service mysql restart</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>frp免内网穿透</title>
+    <url>/2019/10/14/frp%E5%85%8D%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/</url>
+    <content><![CDATA[<p>frp免费内网穿透 <a href="https://www.natfrp.com" target="_blank" rel="noopener">https://www.natfrp.com</a> 免费提供五条免费映射隧道用于内网穿透，且注册和使用都很简单方便，详细信息可自行访问。</p>
+<p>注册登录后点击左侧的仪表盘可以查看自己的使用信息和可选的服务器信息</p>
+<p>然后点击左侧的映射列表，可以进行隧道管理，添加所需要的映射隧道，相关信息页面的提示也很清楚</p>
+<p>添加完成后，服务端的免费映射隧道就已经创建完毕，下面开始客户端的设置</p>
+<p>同样是点击左侧的客户端软件，下载对应的版本客户端到本地的需要进行内网穿透的服务器中，解压运行，按照提示登录账号，选择服务器即可完成设置。只有俩三步，很快就设置好了</p>
+<p>还有域名绑定（自己申请的）直接解析cname到映射的服务器地址上，即可完成域名访问。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>debian安装php7.2</title>
+    <url>/2019/10/14/debian%E5%AE%89%E8%A3%85php7-2/</url>
+    <content><![CDATA[<p>添加 sury.org 的repo</p>
+<figure class="highlight stata"><table><tr><td class="code"><pre><span class="line">apt-get -y install apt-transport-https lsb-release <span class="keyword">ca</span>-certificates</span><br><span class="line"></span><br><span class="line">wget -O /etc/apt/trusted.gpg.<span class="keyword">d</span>/php.gpg https:<span class="comment">//packages.sury.org/php/apt.gpg</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">sh</span> -c 'echo <span class="string">"deb https://packages.sury.org/php/ $(lsb_release -sc) main"</span> &gt; /etc/apt/sources.<span class="keyword">list</span>.<span class="keyword">d</span>/php.<span class="keyword">list</span>'</span><br><span class="line"></span><br><span class="line">apt-get <span class="keyword">update</span></span><br></pre></td></tr></table></figure>
+
+<p>end</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>archlinux 搜狗输入法崩溃</title>
+    <url>/2019/10/14/archlinux-%E6%90%9C%E7%8B%97%E8%BE%93%E5%85%A5%E6%B3%95%E5%B4%A9%E6%BA%83/</url>
+    <content><![CDATA[<p>今天 archlinux 开机后就显示搜狗输入法崩溃，请删除.config/sogou*</p>
+<p>然而照做之后重启任然没有解决，依然会提示搜狗输入法异常</p>
+<p>在终端运行 sogou-qimpanel 后显示 libfcitx-qt.so 这个库缺失,这个库函数是属于fcitx-qt4 这个包中的，故只需要安装 fcitx-qt4 这个包就好了</p>
+<p>yay -S fcitx-qt4</p>
+<p>重启输入法问题解决</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>archlinux安装搜狗输入法</title>
+    <url>/2019/10/14/archlinux%E5%AE%89%E8%A3%85%E6%90%9C%E7%8B%97%E8%BE%93%E5%85%A5%E6%B3%95/</url>
+    <content><![CDATA[<p>安装可能需要 archlinuxcn 的源，我这里已经配置好了</p>
+<p>一、安装 fcitx fcitx-configtool fcitx-im fcitx-sogoupinyin</p>
+<p>pacman -S fcitx fcitx-configtool fcitx-im fcitx-sogoupinyin　</p>
+<p>二、在 ~/.xprofile 文件中添加以下内容</p>
+<p>export GTK_IM_MODULE=fcitx<br>export QT_IM_MODULE=fcitx<br>export XMODIFFIERS=”@im=fcitx”<br>fcitx -d -r –enable sogou-qimpanel</p>
+<p>三、在 /etc/environment 文件中加入以下内容</p>
+<p>GTK_IM_MODULE=fcitx<br>QT_IM_MODULE=fcitx<br>XMODIFIERS=@im=fcitx</p>
+]]></content>
+      <categories>
+        <category>archlinux</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>archlinux安装Windows字体</title>
+    <url>/2019/10/14/archlinux%E5%AE%89%E8%A3%85Windows%E5%AD%97%E4%BD%93/</url>
+    <content><![CDATA[<p>Linux上自带的字体许多情况下不够用，尤其是在打开Windows下的文件时经常会出现乱码的情况。</p>
+<p>为了一劳永逸，我们就直接把 windows 的字体搬到 Linux中。</p>
+<p>这很简单，首先你要复制 windows 系统 中 C:\Windows\Fonts 中的所有字体</p>
+<p>然后在 Linux 中新建文件夹</p>
+<p>sudo mkdir /usr/share/fonts/windows</p>
+<p>接下来把刚才复制的字体全部粘贴到新建的文件夹中</p>
+<p>最后生成字体缓存</p>
+<p>fc-cache -f</p>
+<p>完成</p>
+]]></content>
+      <tags>
+        <tag>linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>test auto hexo</title>
+    <url>/2019/10/14/test-auto-hexo/</url>
+    <content><![CDATA[<p>auto </p>
+<h4 id="deploy"><a href="#deploy" class="headerlink" title="deploy"></a>deploy</h4><h2 id="test"><a href="#test" class="headerlink" title="test"></a>test</h2>]]></content>
+      <categories>
+        <category>test</category>
+      </categories>
+      <tags>
+        <tag>may</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/2019/10/13/test/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2019/10/13/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+]]></content>
+  </entry>
+</search>
