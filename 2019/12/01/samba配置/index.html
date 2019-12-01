@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="linux,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从">
-<meta name="keywords" content="linux">
+<meta name="description" content="RedHat7 配置 samba 文件服务器在system1上通过 SMB 共享/common 目录:  您的 SMB 服务器必须是 STAFF 工作组的一个成员；  共享名必须为 common；  只有 example.com 域内的客户端可以访问 common 共享；  common 必须是可以浏览的；  用户 harry 必须能够读取共享中的内容，如果需要的话，验证的密码是 migwhisk">
 <meta property="og:type" content="article">
-<meta property="og:title" content="wget">
-<meta property="og:url" content="http://yoursite.com/2019/10/14/wget/index.html">
+<meta property="og:title" content="samba配置">
+<meta property="og:url" content="http://yoursite.com/2019/12/01/samba配置/index.html">
 <meta property="og:site_name" content="夜消沉">
-<meta property="og:description" content="wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从">
+<meta property="og:description" content="RedHat7 配置 samba 文件服务器在system1上通过 SMB 共享/common 目录:  您的 SMB 服务器必须是 STAFF 工作组的一个成员；  共享名必须为 common；  只有 example.com 域内的客户端可以访问 common 共享；  common 必须是可以浏览的；  用户 harry 必须能够读取共享中的内容，如果需要的话，验证的密码是 migwhisk">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-14T09:42:05.852Z">
+<meta property="og:updated_time" content="2019-12-01T14:54:29.606Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wget">
-<meta name="twitter:description" content="wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从">
+<meta name="twitter:title" content="samba配置">
+<meta name="twitter:description" content="RedHat7 配置 samba 文件服务器在system1上通过 SMB 共享/common 目录:  您的 SMB 服务器必须是 STAFF 工作组的一个成员；  共享名必须为 common；  只有 example.com 域内的客户端可以访问 common 共享；  common 必须是可以浏览的；  用户 harry 必须能够读取共享中的内容，如果需要的话，验证的密码是 migwhisk">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/14/wget/">
+  <link rel="canonical" href="http://yoursite.com/2019/12/01/samba配置/">
 
 
 
 
 
-  <title>wget | 夜消沉</title>
+  <title>samba配置 | 夜消沉</title>
   
 
 
@@ -305,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/wget/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/01/samba配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="way">
@@ -322,7 +321,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">wget</h1>
+          <h1 class="post-title" itemprop="name headline">samba配置</h1>
         
 
         <div class="post-meta">
@@ -334,8 +333,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T17:41:09+08:00">
-                2019-10-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-01T22:53:53+08:00">
+                2019-12-01
               </time>
             
 
@@ -357,8 +356,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/COMMAND/" itemprop="url" rel="index">
-                    <span itemprop="name">COMMAND</span>
+                  <a href="/categories/RHCE/" itemprop="url" rel="index">
+                    <span itemprop="name">RHCE</span>
                   </a>
                 </span>
 
@@ -375,8 +374,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/10/14/wget/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/14/wget/" itemprop="commentCount"></span>
+                <a href="/2019/12/01/samba配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/01/samba配置/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -403,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  259
+                  1.8k
                 </span>
               
 
@@ -419,7 +418,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  6
                 </span>
               
             </div>
@@ -440,16 +439,156 @@
       
 
       
-        <p>wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。</p>
-<p>命令格式：</p>
-<p>wget [参数] [URL地址]</p>
-<p>命令参数：</p>
-<p>-h, -help 打印语法帮助</p>
-<p>-b, -background 启动后转入后台执行</p>
-<p>-O, –output-document=FILE 命名下载后的文件（大写的O）</p>
-<p>-c, –continue 接着下载没有下载完成的文件，断点续传</p>
-<p>-P, –directory-prefix=PREFIX 指定下载目录</p>
-<p>-i, –input-file=FILE 参数后接FILE中每一行是一个URL</p>
+        <h2 id="RedHat7-配置-samba-文件服务器"><a href="#RedHat7-配置-samba-文件服务器" class="headerlink" title="RedHat7 配置 samba 文件服务器"></a>RedHat7 配置 samba 文件服务器</h2><pre><code>在system1上通过 SMB 共享/common 目录:
+
+您的 SMB 服务器必须是 STAFF 工作组的一个成员；
+
+共享名必须为 common；
+
+只有 example.com 域内的客户端可以访问 common 共享；
+
+common 必须是可以浏览的；
+
+用户 harry 必须能够读取共享中的内容，如果需要的话，验证的密码是 migwhisk</code></pre><hr>
+<ul>
+<li><p>服务器安装 samba</p>
+<ul>
+<li><code>yum install -y samba</code></li>
+<li><code>systemctl enable smb nmb</code></li>
+<li><code>systemctl start smb nmb</code></li>
+<li><code>firewall-cmd --permanent --add-service=samba</code></li>
+<li><code>firewall-cmd --reload</code></li>
+</ul>
+</li>
+<li><p>服务器修改 samba 配置文件</p>
+<ul>
+<li><p>vim /etc/samba/smb.conf</p>
+<ul>
+<li><p>修改 workgroup = STAFF</p>
+</li>
+<li><p>写入:</p>
+<pre><code>[common]
+            comment = common share
+            path = /common
+            hosts allow = 172.25.0.
+            browseable = yes</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>服务器上新建 samba 共享文件夹并修改 selinux 安全文本</p>
+<ul>
+<li><code>mkdir /common</code>    新建共享文件夹(root用户建立的文件夹属组均为root注意权限设置)</li>
+<li><code>chcon -t samba_share_t  /common</code>     修改文件夹 selinux 安全文本</li>
+<li><code>semanage fcontext -a -t samba_share_t &quot;/common(/.*)?&quot;</code>    添加目录的默认安全上下文</li>
+<li><code>restorecon -v /common/</code>    把文件或目录的安全上下文恢复到默认值</li>
+</ul>
+</li>
+<li><p>服务器上新建用户</p>
+<ul>
+<li><code>useradd -s /sbin/nologin harry</code></li>
+<li><code>smbpasswd -a harry</code>        smbpasswd 是 samba-client 包中的命令，使用需要先安装</li>
+</ul>
+</li>
+<li><p>重启 samba 服务    <code>systemctl restart smb nmb</code></p>
+</li>
+<li><p>客户端验证</p>
+<ul>
+<li><code>yum install samba-client</code>    （安装 samba 客户端）</li>
+<li><code>smbclient -U harry //172.25.0.11/common</code>     （登录 samba ）</li>
+<li>使用 mount 挂载<ul>
+<li><code>yum install cifs.utils</code></li>
+<li><code>mount.cifs //172.25.0.11/common /mnt -o user=harry</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="samba-附录"><a href="#samba-附录" class="headerlink" title="samba 附录"></a>samba 附录</h2><ul>
+<li><p>samba 、 nfs 、 ftp 的区别</p>
+<ul>
+<li><p>从名字上进行理解：</p>
+<ul>
+<li>FTP(文件传输协议)</li>
+<li>NFS（网络文件系统）</li>
+<li>samba 即smb（服务信息块）协议</li>
+</ul>
+</li>
+<li><p>使用范围：</p>
+<ul>
+<li>ftp    本身是一个文件传输系统，支持任何操作系统使用</li>
+<li>nfs    unix/linux 专用</li>
+<li>smb    支持各种系统使用</li>
+</ul>
+</li>
+<li><p>传输效率</p>
+<ul>
+<li>ftp    专为文件传输设计的，传输效率最高，但是没传输一个文件需要重新打开端口协商</li>
+<li>nfs    属于远程文件系统映射，除了 RPC 远程映射的代价，连续读写效率非常高</li>
+<li>smb    设计之初就是用来传输小文件的，在大文件传输中效率最差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>samba 使用的 daemon</p>
+<ul>
+<li><p>nmbd ：    这个 daemon 是用来管理工作组、NetBIOS name 等的解析。主要利用 UDP 协议开启 port 137, 138 来负责名称解析的任务；</p>
+</li>
+<li><p>smbd :        这个 daemon 的主要功能就是用来管理 SAMBA 主机分享的目录、档案与打印机等等。主要利用可靠的 TCP 协议来传输数据，开放的端口口为 139 及 445(不一定存在) 。</p>
+</li>
+</ul>
+</li>
+<li><p>samba 使用的联机模式</p>
+<ul>
+<li>peer/peer (Workgroup model, 对等模式)：    适用于小型办公场景，每台计算机都是服务器或者客户端，取得相应电脑上的资源就需要获得电脑用户的登录密码。使用 peer/peer 的架构的好处是每部计算机均可以独立运作，而不受他人的影响！不过， 缺点就是当整个网域内的所有人员都要进行数据分享时，光是知道所有计算机里面的账号与密码，就会很伤脑筋了！ 所以， Peer/Peer 的架构是比较适合 (1)小型的网域，或者是 (2)没有需要常常进行档案数据分享的网络环境，或者是 (3)每个使用者都独自拥有该计算机的拥有权(就是说，该计算机是用户的，而不是公用的！) 而，如果该单位的所有 PC 均是公有的 (例如学校的计算机教室环境)，而且你需要统一控管整个网域里面的账号与密码的话， 那就得使用底下的 domain models 了！</li>
+<li>domain model (主控模式)：        既然使用计算机资源需要账号与密码， 那么我将所有的账号与密码都放置在一部主控计算机 (Primary Domain Controller, PDC) 上面，在我的网域里面，任何人想要使用任何计算机时，都需要在屏幕前方输入账号与密码，然后通通藉由 PDC 服务器的辨识后，才给予适当的权限。也就是说，不同的身份还具有不一样的计算机资源权限！</li>
+</ul>
+</li>
+<li><p>samba 软件包功能说明</p>
+<ul>
+<li><p>samba：        这个软件主要提供了 SMB 服务器所需的各项服务程序 (smbd 及nmbd)、 的文件档、以及其他与 SAMBA 相关的 logrotate 配置文件及开机默认选项档案等；</p>
+</li>
+<li><p>samba-client：        这个软件则提供了当 Linux 做为 SAMBA Client 端时，所需要的工具指令，例如登录samba 的命令 smbclient、 取得相关树形图的 smbtree 、修改添加 samba 用户密码的 smbpasswd 等等；-</p>
+</li>
+<li><p>cifs-utils:        用来挂载 cifs 的命令，例 <code>mount.cifs //172.25.0.11/common /mnt -o user=harry</code></p>
+</li>
+<li><p>samba-common:        这个软件提供的则是服务器与客户端都会使用到的数据</p>
+</li>
+</ul>
+</li>
+<li><p>samba 配置文件： smb.conf 的主要功能选项</p>
+<ul>
+<li><p>security = user|share|domain            (三选一，默认为 user)</p>
+<pre><code>share：分享的数据不需要密码，大家均可使用 (没有安全性)；
+user ：使用 SAMBA 服务器本身的密码数据库，密码数据库与底下的passdb backend 有关；
+domain：使用外部服务器的密码，亦即 SAMBA 是客户端之意，如果设定这个项目， 你还得要提供『password server = IP』的设定值才行；</code></pre></li>
+<li><p>encrypt passwords = Yes</p>
+<pre><code>代表密码要加密，注意那个 passwords 要有 s 才对！</code></pre></li>
+<li><p>passdb backend = 数据库格式</p>
+<pre><code>如前所述，为了加快速度， 目前密码文件已经转为使用数据库了！默认的数据库格式 tdbsam ，而预设的档案为 /var/lib/samba/private/passwd.tdb</code></pre></li>
+<li><p>分享资源的相关参数设定     [分享的名称]</p>
+<pre><code>[分享名称] ：这个分享名称很重要，它是一个『代号』
+browseable ：是否让所有的用户看到这个项目
+writable ：是否可以写入？这里需要注意一下喔！那个 read only 与writable 是两个相似的设定值。如果 writable 在这里设定为 yes ，read only 同时设定为 yes ，哪个是正确的设定？答案是：最后出现的那个设定值为主要的设定！
+create mode 与 directory mode 都与权限有关的
+writelist = 用户, @群组，这个项目可以指定能够进入到此资源的特定使用者。 如果是 @group 的格式，则加入该群组的使用者均可取得使用的权限，设定上会比较简单！</code></pre></li>
+<li><p>pdbedit</p>
+<pre><code>-L ：列出目前在数据库当中的账号与 UID 等相关信息；
+-v ：需要搭配 -L 来执行，可列出更多的讯息，包括家目录等数据；
+-w ：需要搭配 -L 来执行，使用旧版的 smbpasswd 格式来显示数据；
+-a ：新增一个可使用 Samba 的账号，后面的账号需要在 /etc/passwd 内存在；
+-r ：修改一个账号的相关信息，需搭配很多特殊参数，请 man pdbedit；
+-x ：删除一个可使用 Samba 的账号，可先用 -L 找到账号后再删除；
+-m ：后面接的是机器的代码 (machine account)，与 domain model 有关！</code></pre><ul>
+<li><p>常用命令：</p>
+<pre><code>pdbedit -L [-vw] &lt;==单纯的察看帐户信息
+pdbedit -a|-r|-x -u 账号 &lt;==新增/修改/删除账号
+pdbedit -a -m -u 机器账号 &lt;==与 PDC 有关的机器码</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -478,12 +617,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/linux/" rel="tag"># linux</a>
-          
-        </div>
-      
 
       
       
@@ -493,8 +626,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/14/Hexo-部署出现-permission-denied/" rel="next" title="Hexo 部署出现 permission denied">
-                <i class="fa fa-chevron-left"></i> Hexo 部署出现 permission denied
+              <a href="/2019/12/01/yum-仓库简单配置/" rel="next" title="yum 仓库简单配置">
+                <i class="fa fa-chevron-left"></i> yum 仓库简单配置
               </a>
             
           </div>
@@ -503,8 +636,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/14/cp/" rel="prev" title="cp">
-                cp <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/01/samba多用户挂载/" rel="prev" title="samba多用户挂载">
+                samba多用户挂载 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -567,8 +700,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -640,6 +782,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RedHat7-配置-samba-文件服务器"><span class="nav-number">1.</span> <span class="nav-text">RedHat7 配置 samba 文件服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#samba-附录"><span class="nav-number">2.</span> <span class="nav-text">samba 附录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -827,9 +985,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/10/14/wget/';
-          this.page.identifier = '2019/10/14/wget/';
-          this.page.title = 'wget';
+          this.page.url = 'http://yoursite.com/2019/12/01/samba配置/';
+          this.page.identifier = '2019/12/01/samba配置/';
+          this.page.title = 'samba配置';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://way.disqus.com/embed.js';

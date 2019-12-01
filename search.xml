@@ -1,6 +1,327 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>samba多用户挂载</title>
+    <url>/2019/12/01/samba%E5%A4%9A%E7%94%A8%E6%88%B7%E6%8C%82%E8%BD%BD/</url>
+    <content><![CDATA[<h2 id="配置多用户-samba-挂载"><a href="#配置多用户-samba-挂载" class="headerlink" title="配置多用户 samba 挂载"></a>配置多用户 samba 挂载</h2><pre><code>在system1通过 SMB 共享目录/devops，并满足以下要求:
+共享名为 devops；
+共享目录 devops 只能被 example.com 域中的客户端使用；
+共享目录 devops 必须可以被浏览；
+用户 kenji 必须能以读的方式访问此共享，该问密码是 atenorth；
+用户 chihiro 必须能以读写的方式访问此共享，访问密码是 atenorth；
+此共享永久挂载在 system2.example.com 上的/mnt/dev 目录，并使用用户 kenji 作为认证，任何用户可以通过用户 chihiro 来临时获取写的权限。</code></pre><hr>
+<p>服务器</p>
+<ul>
+<li><p>创建共享目录</p>
+<pre><code>&gt;# mkdir /devops</code></pre></li>
+<li><p>修改 /etc/samba/smb.conf</p>
+<pre><code>&gt;# vim /etc/samba/smb.conf
+[devops]
+        path = /devops
+        browseable = yes
+        hosts allow = 172.25.0.
+        write list = chihiro</code></pre></li>
+<li><p>设置用户</p>
+<pre><code>&gt;# useradd kenji
+&gt;# useradd chihiro
+&gt;# smbpasswd -a kenji
+&gt;# smbpasswd -a chihiro</code></pre></li>
+<li><p>权限配置</p>
+<pre><code>&gt;# setfacl -m u:chihiro:rwx /devops                      (使用 acl 为不同用户设置额外权限)</code></pre></li>
+<li><p>selinux 设置</p>
+<pre><code>&gt;# chcon -t samba_share_t /devops</code></pre></li>
+<li><p>重启服务</p>
+<pre><code>&gt;# systemctl restart smb nmb</code></pre></li>
+</ul>
+<p>客户端</p>
+<ul>
+<li><p>测试使用情况</p>
+<pre><code>&gt;# mkdir /mnt/dev
+&gt;# mount.cifs //172.25.0.11/devops /mnt/dev -o user=kenji
+&gt;# cd /mnt/dev &amp;&amp; ls
+&gt;# touch kenji
+touch: cannot touch : Permission denied        (正常因为无写权限)
+&gt;# umount /mnt/dev
+&gt;# mount.cifs //172.25.0.11/devops /mnt/dev -o user=chihiro            (可正常读写)</code></pre></li>
+<li><p>永久挂载需要修改 /etc/fstab</p>
+<pre><code>&gt;# vim /etc/fstab
+//172.25.0.11/devops /mnt/dev cifs defaults,multiuser,username=kenji,password=atenorth,sec=ntlmssp,_netdev 0 0</code></pre></li>
+<li><p>测试挂载是否正常</p>
+<pre><code>&gt;# mount -a
+&gt;# su - kenji                                               (切换到用户 kenji )
+&gt;# touch kenji /mnt/dev                                     (无写权限不可创建)
+&gt;# cifscreds add -u chihiro 172.25.0.11                     (临时获取 chihiro 的读写权限)
+&gt;# touch kenji /mnt/dev                                     (可以创建文件，说明能够临时获取读写权限)</code></pre></li>
+<li><p>finish</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>samba配置</title>
+    <url>/2019/12/01/samba%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="RedHat7-配置-samba-文件服务器"><a href="#RedHat7-配置-samba-文件服务器" class="headerlink" title="RedHat7 配置 samba 文件服务器"></a>RedHat7 配置 samba 文件服务器</h2><pre><code>在system1上通过 SMB 共享/common 目录:
+
+您的 SMB 服务器必须是 STAFF 工作组的一个成员；
+
+共享名必须为 common；
+
+只有 example.com 域内的客户端可以访问 common 共享；
+
+common 必须是可以浏览的；
+
+用户 harry 必须能够读取共享中的内容，如果需要的话，验证的密码是 migwhisk</code></pre><hr>
+<ul>
+<li><p>服务器安装 samba</p>
+<ul>
+<li><code>yum install -y samba</code></li>
+<li><code>systemctl enable smb nmb</code></li>
+<li><code>systemctl start smb nmb</code></li>
+<li><code>firewall-cmd --permanent --add-service=samba</code></li>
+<li><code>firewall-cmd --reload</code></li>
+</ul>
+</li>
+<li><p>服务器修改 samba 配置文件</p>
+<ul>
+<li><p>vim /etc/samba/smb.conf</p>
+<ul>
+<li><p>修改 workgroup = STAFF</p>
+</li>
+<li><p>写入:</p>
+<pre><code>[common]
+            comment = common share
+            path = /common
+            hosts allow = 172.25.0.
+            browseable = yes</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>服务器上新建 samba 共享文件夹并修改 selinux 安全文本</p>
+<ul>
+<li><code>mkdir /common</code>    新建共享文件夹(root用户建立的文件夹属组均为root注意权限设置)</li>
+<li><code>chcon -t samba_share_t  /common</code>     修改文件夹 selinux 安全文本</li>
+<li><code>semanage fcontext -a -t samba_share_t &quot;/common(/.*)?&quot;</code>    添加目录的默认安全上下文</li>
+<li><code>restorecon -v /common/</code>    把文件或目录的安全上下文恢复到默认值</li>
+</ul>
+</li>
+<li><p>服务器上新建用户</p>
+<ul>
+<li><code>useradd -s /sbin/nologin harry</code></li>
+<li><code>smbpasswd -a harry</code>        smbpasswd 是 samba-client 包中的命令，使用需要先安装</li>
+</ul>
+</li>
+<li><p>重启 samba 服务    <code>systemctl restart smb nmb</code></p>
+</li>
+<li><p>客户端验证</p>
+<ul>
+<li><code>yum install samba-client</code>    （安装 samba 客户端）</li>
+<li><code>smbclient -U harry //172.25.0.11/common</code>     （登录 samba ）</li>
+<li>使用 mount 挂载<ul>
+<li><code>yum install cifs.utils</code></li>
+<li><code>mount.cifs //172.25.0.11/common /mnt -o user=harry</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="samba-附录"><a href="#samba-附录" class="headerlink" title="samba 附录"></a>samba 附录</h2><ul>
+<li><p>samba 、 nfs 、 ftp 的区别</p>
+<ul>
+<li><p>从名字上进行理解：</p>
+<ul>
+<li>FTP(文件传输协议)</li>
+<li>NFS（网络文件系统）</li>
+<li>samba 即smb（服务信息块）协议</li>
+</ul>
+</li>
+<li><p>使用范围：</p>
+<ul>
+<li>ftp    本身是一个文件传输系统，支持任何操作系统使用</li>
+<li>nfs    unix/linux 专用</li>
+<li>smb    支持各种系统使用</li>
+</ul>
+</li>
+<li><p>传输效率</p>
+<ul>
+<li>ftp    专为文件传输设计的，传输效率最高，但是没传输一个文件需要重新打开端口协商</li>
+<li>nfs    属于远程文件系统映射，除了 RPC 远程映射的代价，连续读写效率非常高</li>
+<li>smb    设计之初就是用来传输小文件的，在大文件传输中效率最差</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>samba 使用的 daemon</p>
+<ul>
+<li><p>nmbd ：    这个 daemon 是用来管理工作组、NetBIOS name 等的解析。主要利用 UDP 协议开启 port 137, 138 来负责名称解析的任务；</p>
+</li>
+<li><p>smbd :        这个 daemon 的主要功能就是用来管理 SAMBA 主机分享的目录、档案与打印机等等。主要利用可靠的 TCP 协议来传输数据，开放的端口口为 139 及 445(不一定存在) 。</p>
+</li>
+</ul>
+</li>
+<li><p>samba 使用的联机模式</p>
+<ul>
+<li>peer/peer (Workgroup model, 对等模式)：    适用于小型办公场景，每台计算机都是服务器或者客户端，取得相应电脑上的资源就需要获得电脑用户的登录密码。使用 peer/peer 的架构的好处是每部计算机均可以独立运作，而不受他人的影响！不过， 缺点就是当整个网域内的所有人员都要进行数据分享时，光是知道所有计算机里面的账号与密码，就会很伤脑筋了！ 所以， Peer/Peer 的架构是比较适合 (1)小型的网域，或者是 (2)没有需要常常进行档案数据分享的网络环境，或者是 (3)每个使用者都独自拥有该计算机的拥有权(就是说，该计算机是用户的，而不是公用的！) 而，如果该单位的所有 PC 均是公有的 (例如学校的计算机教室环境)，而且你需要统一控管整个网域里面的账号与密码的话， 那就得使用底下的 domain models 了！</li>
+<li>domain model (主控模式)：        既然使用计算机资源需要账号与密码， 那么我将所有的账号与密码都放置在一部主控计算机 (Primary Domain Controller, PDC) 上面，在我的网域里面，任何人想要使用任何计算机时，都需要在屏幕前方输入账号与密码，然后通通藉由 PDC 服务器的辨识后，才给予适当的权限。也就是说，不同的身份还具有不一样的计算机资源权限！</li>
+</ul>
+</li>
+<li><p>samba 软件包功能说明</p>
+<ul>
+<li><p>samba：        这个软件主要提供了 SMB 服务器所需的各项服务程序 (smbd 及nmbd)、 的文件档、以及其他与 SAMBA 相关的 logrotate 配置文件及开机默认选项档案等；</p>
+</li>
+<li><p>samba-client：        这个软件则提供了当 Linux 做为 SAMBA Client 端时，所需要的工具指令，例如登录samba 的命令 smbclient、 取得相关树形图的 smbtree 、修改添加 samba 用户密码的 smbpasswd 等等；-</p>
+</li>
+<li><p>cifs-utils:        用来挂载 cifs 的命令，例 <code>mount.cifs //172.25.0.11/common /mnt -o user=harry</code></p>
+</li>
+<li><p>samba-common:        这个软件提供的则是服务器与客户端都会使用到的数据</p>
+</li>
+</ul>
+</li>
+<li><p>samba 配置文件： smb.conf 的主要功能选项</p>
+<ul>
+<li><p>security = user|share|domain            (三选一，默认为 user)</p>
+<pre><code>share：分享的数据不需要密码，大家均可使用 (没有安全性)；
+user ：使用 SAMBA 服务器本身的密码数据库，密码数据库与底下的passdb backend 有关；
+domain：使用外部服务器的密码，亦即 SAMBA 是客户端之意，如果设定这个项目， 你还得要提供『password server = IP』的设定值才行；</code></pre></li>
+<li><p>encrypt passwords = Yes</p>
+<pre><code>代表密码要加密，注意那个 passwords 要有 s 才对！</code></pre></li>
+<li><p>passdb backend = 数据库格式</p>
+<pre><code>如前所述，为了加快速度， 目前密码文件已经转为使用数据库了！默认的数据库格式 tdbsam ，而预设的档案为 /var/lib/samba/private/passwd.tdb</code></pre></li>
+<li><p>分享资源的相关参数设定     [分享的名称]</p>
+<pre><code>[分享名称] ：这个分享名称很重要，它是一个『代号』
+browseable ：是否让所有的用户看到这个项目
+writable ：是否可以写入？这里需要注意一下喔！那个 read only 与writable 是两个相似的设定值。如果 writable 在这里设定为 yes ，read only 同时设定为 yes ，哪个是正确的设定？答案是：最后出现的那个设定值为主要的设定！
+create mode 与 directory mode 都与权限有关的
+writelist = 用户, @群组，这个项目可以指定能够进入到此资源的特定使用者。 如果是 @group 的格式，则加入该群组的使用者均可取得使用的权限，设定上会比较简单！</code></pre></li>
+<li><p>pdbedit</p>
+<pre><code>-L ：列出目前在数据库当中的账号与 UID 等相关信息；
+-v ：需要搭配 -L 来执行，可列出更多的讯息，包括家目录等数据；
+-w ：需要搭配 -L 来执行，使用旧版的 smbpasswd 格式来显示数据；
+-a ：新增一个可使用 Samba 的账号，后面的账号需要在 /etc/passwd 内存在；
+-r ：修改一个账号的相关信息，需搭配很多特殊参数，请 man pdbedit；
+-x ：删除一个可使用 Samba 的账号，可先用 -L 找到账号后再删除；
+-m ：后面接的是机器的代码 (machine account)，与 domain model 有关！</code></pre><ul>
+<li><p>常用命令：</p>
+<pre><code>pdbedit -L [-vw] &lt;==单纯的察看帐户信息
+pdbedit -a|-r|-x -u 账号 &lt;==新增/修改/删除账号
+pdbedit -a -m -u 机器账号 &lt;==与 PDC 有关的机器码</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>yum 仓库简单配置</title>
+    <url>/2019/12/01/yum-%E4%BB%93%E5%BA%93%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="yum-配置本地仓库"><a href="#yum-配置本地仓库" class="headerlink" title="yum 配置本地仓库"></a>yum 配置本地仓库</h2><ul>
+<li><p>yum 仓库在 /etc/yum.repos.d 目录中</p>
+</li>
+<li><p>以下添加名为 rhce.repo 的本地 yum 仓库</p>
+<p>  <code>vim /etc/yum.repos.d/rhce.repo</code></p>
+<pre><code># cat /etc/yum.repos.d/rhce.repo
+
+[rhce]
+gpgcheck = 0
+enabled = 1
+baseurl = http://content.example.com/rhel7.0/x86_64/dvd
+
+# yum clean all
+# yum makecache
+# yum repolist enabled|disabled                     查看启用|禁用的仓库</code></pre></li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>ipv6配置</title>
+    <url>/2019/12/01/ipv6%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="RedHat7-配置-ipv6-地址"><a href="#RedHat7-配置-ipv6-地址" class="headerlink" title="RedHat7 配置 ipv6 地址"></a>RedHat7 配置 ipv6 地址</h2><pre><code>在您的考试系统上配置接口 eth0 使用下列 IPv6 地址:
+system1上的地址应该是 2003:ac18::305/64：
+system2上的地址应该是 2003:ac18::306/64；
+两个系统必须能与网络 2003:ac18/64 内的系统通信 ；
+地址必须在重启后依旧生效；
+两个系统必须保持当前的 IPv4 地址并能通信。</code></pre><hr>
+<ul>
+<li><p>配置过程（以一台为例，另同）</p>
+<pre><code>&gt; # nmcli connection modify eth0 ipv6.method manual ipv6.address &quot;2003:ac18::305/64&quot;
+&gt; # nmcli connection up eth0</code></pre></li>
+<li><p>测试能否 ping 通</p>
+<pre><code>&gt; # ping6 2003:ac18::305</code></pre></li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>端口转发</title>
+    <url>/2019/12/01/%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/</url>
+    <content><![CDATA[<h2 id="配置端口转发"><a href="#配置端口转发" class="headerlink" title="配置端口转发"></a>配置端口转发</h2><pre><code>  在系统 system1 配置端口转发，要求如下:
+在 172.25.0.0/24 网络中的客户机，访问 server0 的本地端口 5423 将被转发到 80
+此设置必须永久有效。</code></pre><hr>
+<ul>
+<li>首先要安装并启动 http 服务<ul>
+<li>使用 yum 安装 httpd<ul>
+<li><code>yum install -y httpd</code></li>
+</ul>
+</li>
+<li>启动 httpd.service<ul>
+<li><code>systemctl enable httpd.service</code></li>
+<li><code>systemctl start httpd.service</code></li>
+</ul>
+</li>
+<li>添加网页内容，例如：<ul>
+<li><code>echo this is server &gt; /var/www/html/index.html</code></li>
+</ul>
+</li>
+<li>添加 httpd.service 到防火墙<ul>
+<li><code>firewall-cmd --permanent --add-service=http</code></li>
+<li><code>firewall-cmd --reload</code></li>
+</ul>
+</li>
+<li>本机查看是否能够访问到网页内容<ul>
+<li><code>curl localhost</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>使用 firewall-cmd 的富规则实现端口转发</p>
+<blockquote>
+<p>firewall-cmd –permanent –add-rich-rule ‘rule family=ipv4 source address=172.25.0.0/24 forward-port port=5423 to-port=80 protocol=tcp’</p>
+</blockquote>
+<blockquote>
+<p>firewall-cmd –reload</p>
+</blockquote>
+</li>
+<li><p>查看是否生效</p>
+<ul>
+<li><code>curl 172.25.0.11:5423</code></li>
+</ul>
+</li>
+<li><p>更多详细内容通过 man 手册查看</p>
+<ul>
+<li><code>man firewalld.richlanguage</code></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>ssh访问控制</title>
     <url>/2019/11/28/ssh%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/</url>
     <content><![CDATA[<h2 id="SSH-访问控制"><a href="#SSH-访问控制" class="headerlink" title="SSH 访问控制"></a>SSH 访问控制</h2><blockquote>

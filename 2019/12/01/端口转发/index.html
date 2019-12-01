@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="linux,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从">
-<meta name="keywords" content="linux">
+<meta name="description" content="配置端口转发  在系统 system1 配置端口转发，要求如下: 在 172.25.0.0/24 网络中的客户机，访问 server0 的本地端口 5423 将被转发到 80 此设置必须永久有效。  首先要安装并启动 http 服务 使用 yum 安装 httpd yum install -y httpd   启动 httpd.service systemctl enable httpd.serv">
 <meta property="og:type" content="article">
-<meta property="og:title" content="wget">
-<meta property="og:url" content="http://yoursite.com/2019/10/14/wget/index.html">
+<meta property="og:title" content="端口转发">
+<meta property="og:url" content="http://yoursite.com/2019/12/01/端口转发/index.html">
 <meta property="og:site_name" content="夜消沉">
-<meta property="og:description" content="wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从">
+<meta property="og:description" content="配置端口转发  在系统 system1 配置端口转发，要求如下: 在 172.25.0.0/24 网络中的客户机，访问 server0 的本地端口 5423 将被转发到 80 此设置必须永久有效。  首先要安装并启动 http 服务 使用 yum 安装 httpd yum install -y httpd   启动 httpd.service systemctl enable httpd.serv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-14T09:42:05.852Z">
+<meta property="og:updated_time" content="2019-12-01T14:47:12.319Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wget">
-<meta name="twitter:description" content="wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从">
+<meta name="twitter:title" content="端口转发">
+<meta name="twitter:description" content="配置端口转发  在系统 system1 配置端口转发，要求如下: 在 172.25.0.0/24 网络中的客户机，访问 server0 的本地端口 5423 将被转发到 80 此设置必须永久有效。  首先要安装并启动 http 服务 使用 yum 安装 httpd yum install -y httpd   启动 httpd.service systemctl enable httpd.serv">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/14/wget/">
+  <link rel="canonical" href="http://yoursite.com/2019/12/01/端口转发/">
 
 
 
 
 
-  <title>wget | 夜消沉</title>
+  <title>端口转发 | 夜消沉</title>
   
 
 
@@ -305,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/14/wget/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/01/端口转发/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="way">
@@ -322,7 +321,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">wget</h1>
+          <h1 class="post-title" itemprop="name headline">端口转发</h1>
         
 
         <div class="post-meta">
@@ -334,8 +333,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-14T17:41:09+08:00">
-                2019-10-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-01T22:45:33+08:00">
+                2019-12-01
               </time>
             
 
@@ -357,8 +356,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/COMMAND/" itemprop="url" rel="index">
-                    <span itemprop="name">COMMAND</span>
+                  <a href="/categories/RHCE/" itemprop="url" rel="index">
+                    <span itemprop="name">RHCE</span>
                   </a>
                 </span>
 
@@ -375,8 +374,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/10/14/wget/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/10/14/wget/" itemprop="commentCount"></span>
+                <a href="/2019/12/01/端口转发/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/01/端口转发/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -403,7 +402,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  259
+                  212
                 </span>
               
 
@@ -440,16 +439,56 @@
       
 
       
-        <p>wget是一个下载文件的工具，它用在命令行下。对于Linux用户是必不可少的工具，我们经常要下载一些软件或从远程服务器恢复备份到本地服务器。wget支持HTTP，HTTPS和FTP协议，可以使用HTTP代理。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性。如果是由于网络的原因下载失败，wget会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。</p>
-<p>命令格式：</p>
-<p>wget [参数] [URL地址]</p>
-<p>命令参数：</p>
-<p>-h, -help 打印语法帮助</p>
-<p>-b, -background 启动后转入后台执行</p>
-<p>-O, –output-document=FILE 命名下载后的文件（大写的O）</p>
-<p>-c, –continue 接着下载没有下载完成的文件，断点续传</p>
-<p>-P, –directory-prefix=PREFIX 指定下载目录</p>
-<p>-i, –input-file=FILE 参数后接FILE中每一行是一个URL</p>
+        <h2 id="配置端口转发"><a href="#配置端口转发" class="headerlink" title="配置端口转发"></a>配置端口转发</h2><pre><code>  在系统 system1 配置端口转发，要求如下:
+在 172.25.0.0/24 网络中的客户机，访问 server0 的本地端口 5423 将被转发到 80
+此设置必须永久有效。</code></pre><hr>
+<ul>
+<li>首先要安装并启动 http 服务<ul>
+<li>使用 yum 安装 httpd<ul>
+<li><code>yum install -y httpd</code></li>
+</ul>
+</li>
+<li>启动 httpd.service<ul>
+<li><code>systemctl enable httpd.service</code></li>
+<li><code>systemctl start httpd.service</code></li>
+</ul>
+</li>
+<li>添加网页内容，例如：<ul>
+<li><code>echo this is server &gt; /var/www/html/index.html</code></li>
+</ul>
+</li>
+<li>添加 httpd.service 到防火墙<ul>
+<li><code>firewall-cmd --permanent --add-service=http</code></li>
+<li><code>firewall-cmd --reload</code></li>
+</ul>
+</li>
+<li>本机查看是否能够访问到网页内容<ul>
+<li><code>curl localhost</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>使用 firewall-cmd 的富规则实现端口转发</p>
+<blockquote>
+<p>firewall-cmd –permanent –add-rich-rule ‘rule family=ipv4 source address=172.25.0.0/24 forward-port port=5423 to-port=80 protocol=tcp’</p>
+</blockquote>
+<blockquote>
+<p>firewall-cmd –reload</p>
+</blockquote>
+</li>
+<li><p>查看是否生效</p>
+<ul>
+<li><code>curl 172.25.0.11:5423</code></li>
+</ul>
+</li>
+<li><p>更多详细内容通过 man 手册查看</p>
+<ul>
+<li><code>man firewalld.richlanguage</code></li>
+</ul>
+</li>
+</ul>
 
       
     </div>
@@ -478,12 +517,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/linux/" rel="tag"># linux</a>
-          
-        </div>
-      
 
       
       
@@ -493,8 +526,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/14/Hexo-部署出现-permission-denied/" rel="next" title="Hexo 部署出现 permission denied">
-                <i class="fa fa-chevron-left"></i> Hexo 部署出现 permission denied
+              <a href="/2019/11/28/ssh访问控制/" rel="next" title="ssh访问控制">
+                <i class="fa fa-chevron-left"></i> ssh访问控制
               </a>
             
           </div>
@@ -503,8 +536,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/10/14/cp/" rel="prev" title="cp">
-                cp <i class="fa fa-chevron-right"></i>
+              <a href="/2019/12/01/ipv6配置/" rel="prev" title="ipv6配置">
+                ipv6配置 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -567,8 +600,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -640,6 +682,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置端口转发"><span class="nav-number">1.</span> <span class="nav-text">配置端口转发</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -827,9 +885,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2019/10/14/wget/';
-          this.page.identifier = '2019/10/14/wget/';
-          this.page.title = 'wget';
+          this.page.url = 'http://yoursite.com/2019/12/01/端口转发/';
+          this.page.identifier = '2019/12/01/端口转发/';
+          this.page.title = '端口转发';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://way.disqus.com/embed.js';
