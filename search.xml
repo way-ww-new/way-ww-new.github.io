@@ -1,6 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>nfs配置</title>
+    <url>/2019/12/03/nfs%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="NFS-共享配置"><a href="#NFS-共享配置" class="headerlink" title="NFS 共享配置"></a>NFS 共享配置</h2><pre><code>在system1配置 NFS 服务，要求如下:
+以只读的方式共享目录/public，同时只能被 example.com 域中的系统访问；
+以读写的方式共享目录/protected，能被 example.com 域中的系统访问；
+访问/protected 需要通过 Kerberos 安全加密，您可以使用下面 URL 提供的密钥:http://classroom.example.com/pub/keytabs/system1.keytab；
+目录/protected 应该包含名为 project 拥有人为 ldapuser0 的子目录；
+用户 ldapuser0 能以读写方式访问/protected/project。
+
+在system2上挂载一个来自 system1.exmaple.com 的共享，并符合下列要求:
+/public 挂载在下面的目录上/mnt/nfsmount；
+/protected挂载在下面的目录上/mnt/nfssecure 并使用安全的方式，密钥下载 URL:http://classroom.example.com/pub/keytabs/system2.keytab；
+用户 ldapuser0 能够在/mnt/nfssecure/project 上创建文件；
+这些文件系统在系统启动时自动挂载。</code></pre><hr>
+<p>system1 配置</p>
+<ul>
+<li><p>安装软件</p>
+<pre><code>&gt;# yum -y install nfs-utils rpcbind                                       默认 RedHat 已经安装好这俩软件了</code></pre></li>
+<li><p>新建共享文件</p>
+<pre><code>&gt;# mkdir /public
+&gt;# mkdir -p /protected/project</code></pre></li>
+<li><p>修改配置文件</p>
+<pre><code>&gt;# vim /etc/sysconfig/nfs
+RPCNFSDARGS=&quot;-V 4.2&quot;
+
+&gt;# vim /etc/exports
+/public        *.example.com(ro)
+/protected     *.example.com(rw,sec=krb5p)</code></pre></li>
+<li><p>修改权限</p>
+<pre><code>&gt;# chown ldapuser0 /protected/project</code></pre></li>
+<li><p>下载 keytab 文件</p>
+<pre><code>&gt;# wget http://classroom.example.com/pub/keytabs/system1.keytab -O /etc/krb5.keytab</code></pre></li>
+<li><p>启动 nfs</p>
+<pre><code>&gt;# systemctl enable nfs-server
+&gt;# systemctl start nfs-server
+&gt;# systemctl enable nfs-secure-server
+&gt;# systemctl start nfs-secure-server</code></pre></li>
+<li><p>防火墙配置</p>
+<pre><code>&gt;# firewall-cmd --permanent --add-service=nfs
+&gt;# firewall-cmd --permanent --add-service=rpc-bind
+&gt;# firewall-cmd --permanent --add-service=mountd
+&gt;# firewall-cmd --reload</code></pre></li>
+</ul>
+<hr>
+<p>system2 配置</p>
+<ul>
+<li><p>创建挂载点</p>
+<pre><code>&gt;# mkdir /mnt/nfsmount
+&gt;# mkdir /mnt/nfssecure</code></pre></li>
+<li><p>下载 keytab 文件</p>
+<pre><code>&gt;# wget http://classroom.example.com/pub/keytabs/system2.keytab -O /etc/krb5.keytab</code></pre></li>
+<li><p>修改 /etc/fstab</p>
+<pre><code>server.example.com:/public      /mnt/nfsmount   nfs     defaults        0 0
+server.example.com:/protected   /mnt/nfssecure  nfs     defaults,v4.2,sec=krb5p 0 0</code></pre></li>
+<li><p>启动服务</p>
+<pre><code>&gt;# systemctl enable nfs-secure
+&gt;# systemctl restart nfs-secure</code></pre></li>
+<li><p>挂载</p>
+<pre><code>&gt;# mount -a</code></pre></li>
+<li><p>测试</p>
+<pre><code>&gt;# ssh ldapuser0@localhost
+&gt;# klist                                            查看 Kerberos 凭证，没有获取凭证需要 kinit 获取
+&gt;# touch /protected/project/file                    测试写权限</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>postfix配置</title>
+    <url>/2019/12/03/postfix%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="配置本地邮件服务器"><a href="#配置本地邮件服务器" class="headerlink" title="配置本地邮件服务器"></a>配置本地邮件服务器</h2><pre><code>在系统system1上配置邮件服务，满足以下要求:
+这些系统不接收外部发送来的邮件；
+在这些系统上本地发送的任何邮件都会自动路由到smtp0.example.com；
+从这些系统上发送的邮件显示来自于system1.example.com；
+  您可以通过在system1上发送邮件到本地用户 student 来测试您的配置，系统system2.example.com 上的用户 student 将会收到这封邮件。</code></pre><hr>
+<ul>
+<li><p>修改 postfix 配置文件(以 system1 为例)</p>
+<pre><code>&gt;# vim /etc/postfix/main.cf                             在文件最后加入下面内容
+myhostname = system1.example.com
+relayhost = [smtp0.example.com]                          自动路由配置
+inet_interfaces = loopback-only                          监听回环网卡
+myorigin = system1.example.com                             邮件显示
+local_transport = error:local
+mydestination =                                         内容为空</code></pre></li>
+<li><p>重启服务</p>
+<pre><code>&gt;# systemctl restart postfix.service
+&gt;# systemctl enable postfix.service</code></pre></li>
+<li><p>同样配置 system2</p>
+</li>
+<li><p>测试</p>
+<pre><code>&gt;# echo &quot;test postfix&quot; | mail -s &quot;test1&quot; student
+&gt;# su - student
+&gt;# mail
+&amp; 1</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>mariad简单配置</title>
+    <url>/2019/12/03/mariad%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="Mariadb-数据库配置"><a href="#Mariadb-数据库配置" class="headerlink" title="Mariadb 数据库配置"></a>Mariadb 数据库配置</h2><pre><code>在system1上创建一个 MariaDB 数据库，名为 Contacts，并符合以下条件:
+数据库应该包含来自数据库复制的内容，复制文件的 URL 为:http://classroom.example.com/pub/materials/users.sql:
+数据库只能被 localhost 访问；
+除了 root 用户，此数据库只能被用户 Raikon 查询，此用户密码为 atenorth ， root 用户的密码为 atenorth，同时不允许空密码登陆。
+在系统 system1上使用数据库 Contacts，并使用相应的 SQL 查询以回答下列问题:
+密码是 solicitous 的人的名字?
+有多少人的姓名是 Barbara 同时居住在 Sunnyvale?</code></pre><hr>
+<ul>
+<li><p>安装数据库</p>
+<pre><code>&gt;# yum install -y mariadb-server mariadb</code></pre></li>
+<li><p>启动数据库</p>
+<pre><code>&gt;# systemctl enable mariadb
+&gt;# systemctl start mariadb</code></pre></li>
+<li><p>设置防火墙</p>
+<pre><code>&gt;# firewall-cmd --permanent --add-service=mysql
+&gt;# firewall-cmd --reload</code></pre></li>
+<li><p>数据库安全控制</p>
+<pre><code>&gt;# mysql_secure_installation
+&gt; 全部选择 Y ，并在设置 root 密码那一步设置题目要求的密码</code></pre></li>
+<li><p>root 用户登录数据库并完成新建数据库的要求</p>
+<pre><code>&gt;# wget http://classroom.example.com/pub/materials/users.sql    下载题目文件
+&gt;# mysql -uroot -p                                              注意 -u 和用户名之间建议连在一起写，即 -uroot 和 -uRaikon
+&gt; CREATE DATABASE Contacts;                                     新建 Contacts 数据库
+&gt; USE Contacts;                                                 进入 Contacts 数据库
+&gt; source /root/users.sql;                                       导入数据
+&gt; show tables;                                                  查看是否有数据导入</code></pre></li>
+<li><p>设置 Raikon 等用户权限</p>
+<pre><code>&gt; GRANT select ON Contacts.* to Raikon@localhost IDENTIFIED BY &apos;atenorth&apos;;
+&gt; DELETE FROM mysql.user WHERE Password=&apos;&apos;;                     删除空用户密码
+&gt; exit                                                          退出数据库
+&gt; mysql -uRaikon -p                                             测试 Raikon 用户登录权限</code></pre></li>
+<li><p>数据库查询</p>
+<pre><code>&gt; SELECT name FROM base WHERE password=&apos;solicitous&apos;;
+&gt; SELECT count(*) FROM base,location WHERE base.name=&apos;Barbara&apos; AND location.city=&apos;Sunnyvale&apos; AND base.id=location.id ;</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>RHCE简单脚本</title>
+    <url>/2019/12/03/RHCE%E7%AE%80%E5%8D%95%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h2 id="RHCE-编写脚本"><a href="#RHCE-编写脚本" class="headerlink" title="RHCE 编写脚本"></a>RHCE 编写脚本</h2><pre><code>在 system1上创建一个名为/root/foo.sh 的脚本，让其提供下列特性:
+当运行/root/foo.sh redhat，输出为 fedora；
+当运行/root/foo.sh fedora，输出为 redhat；
+当没有任何参数或者参数不是 redhat 或者 fedora 时，其错误输出产生以下的信息:/root/foo.sh redhat|fedora
+
+在 system1上创建一个脚本，名为/root/batchusers，此脚本能为系统system1创建本地用户，且这些用户名来自一个文件，同时满足:
+此脚本要求提供一个参数，此参数就是包含用户名列表的文件；
+如果没有提供参数，此脚本应该给出下面的提示信息 Usage: /root/batchusers userfile 然后退出并返回相应的值；
+如果提供一个不存在的文件名，此脚本应该给出下面的提示信息 Input file not found 然后退出并返回相应的值；
+创建的用户登陆 Shell 为/bin/false，此脚本不需要为用户设置密码；
+您可以从下面的 URL 获取用户名列表作为测试用:http://classroom.example.com/pub/materials/userlist</code></pre><hr>
+<ul>
+<li><p>编写脚本 foo.sh</p>
+<pre><code>&gt;# vim /root/foo.sh
+#!/bin/bash
+if [ &quot;$1&quot; = &quot;fedora&quot; ];then
+echo redhat
+elif [ &quot;$1&quot; = &quot;redhat&quot; ];then
+echo fedora
+else
+echo &quot;/root/foo.sh redhat|fedora&quot;
+fi
+
+&gt;# chmod +x /root/foo.sh
+&gt;# ./root/foo.sh redhat
+fedora</code></pre></li>
+<li><p>编写脚本 batchuser</p>
+<pre><code>&gt;# vim /root/batchusers
+#!/bin/bash
+if [ &quot;$#&quot; = 0 ];then
+echo &quot;Usage:/root/batchusers userfile&quot;
+exit 1
+elif [ ! -f &quot;$1&quot; ];then
+echo &quot;Inputfile not found&quot;
+exit 2
+else
+for name in $(cat $1)
+do
+useradd -s /bin/false $name
+done
+fi
+
+&gt;# chmod +x /root/batchusers</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>samba多用户挂载</title>
     <url>/2019/12/01/samba%E5%A4%9A%E7%94%A8%E6%88%B7%E6%8C%82%E8%BD%BD/</url>
     <content><![CDATA[<h2 id="配置多用户-samba-挂载"><a href="#配置多用户-samba-挂载" class="headerlink" title="配置多用户 samba 挂载"></a>配置多用户 samba 挂载</h2><pre><code>在system1通过 SMB 共享目录/devops，并满足以下要求:
