@@ -1,6 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>链路聚合</title>
+    <url>/2019/12/06/%E9%93%BE%E8%B7%AF%E8%81%9A%E5%90%88/</url>
+    <content><![CDATA[<h2 id="链路聚合"><a href="#链路聚合" class="headerlink" title="链路聚合"></a>链路聚合</h2><pre><code>在system1.example.com 和 system2.example.com 之间配置一个链路 team0: 此链路使用接口 eth1和eth2：
+此链路在一个接口失效时仍然能工作;
+此链路在system1使用下面的地址172.24.4.30/255.255.255.0；
+此链路在system2使用下面的地址172.24.4.40/255.255.255.0；
+此链路在系统重启之后依然保持正常状态。</code></pre><hr>
+<h3 id="system1-配置"><a href="#system1-配置" class="headerlink" title="system1 配置"></a>system1 配置</h3><pre><code>&gt;# nmcli connection add type team con-name team0 ifname team0 connection.autoconnect yes config &apos;{&quot;runner&quot;:{&quot;name&quot;:&quot;activebackup&quot;}}&apos;
+&gt;# nmcli connection add type team-slave con-name eth1 ifname eth1 connection.autoconnect yes master team0
+&gt;# nmcli connection add type team-slave con-name eth2 ifname eth2 connection.autoconnect yes master team0
+&gt;# nmcli connection modify team0 ipv4.method manual ipv4.address &quot;172.24.4.30/24&quot; connection.autoconnect yes
+&gt;# nmcli connection up team0
+&gt;# teamdctl team0 state
+&gt;# systemctl restart network</code></pre><h3 id="system2配置"><a href="#system2配置" class="headerlink" title="system2配置"></a>system2配置</h3><pre><code>&gt;# nmcli connection add type team con-name team0 ifname team0 connection.autoconnect yes config &apos;{&quot;runner&quot;:{&quot;name&quot;:&quot;activebackup&quot;}}&apos;
+&gt;# nmcli connection add type team-slave con-name eth1 ifname eth1 connection.autoconnect yes master team0
+&gt;# nmcli connection add type team-slave con-name eth2 ifname eth2 connection.autoconnect yes master team0
+&gt;# nmcli connection modify team0 ipv4.method manual ipv4.address &quot;172.24.4.40/24&quot; connection.autoconnect yes
+&gt;# nmcli connection up team0
+&gt;# teamdctl team0 state
+&gt;# systemctl restart network</code></pre><p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>动态web</title>
+    <url>/2019/12/06/%E5%8A%A8%E6%80%81web/</url>
+    <content><![CDATA[<h2 id="实现动态-web-内容"><a href="#实现动态-web-内容" class="headerlink" title="实现动态 web 内容"></a>实现动态 web 内容</h2><pre><code>在system1上配置提供动态 Web 内容，要求如下:
+动态内容由名为 webapp0.example.com 的虚拟主机提供
+虚拟主机侦听在端口 8909
+从 http://classroom.example.com/pub/materials/webinfo.wsgi 下载一个脚本，然后放在适当的位置，无论如何不要修改此文件的内容
+客户端访问 http://webapp0.example.com:8909 可接收到动态生成的 Web 页
+此 http://webapp0.example.com:8909 必须能被 example.com 域内的所有系统访问</code></pre><hr>
+<ul>
+<li><p>安装软件</p>
+<pre><code>&gt;# yum install -y mod_wsgi</code></pre></li>
+<li><p>查看配置文档</p>
+<pre><code>&gt;# rpm -ql mod_wsgi</code></pre></li>
+<li><p>下载脚本</p>
+<pre><code>&gt;# wget http://classroom.example.com/pub/materials/webinfo.wsgi -O /var/www/cgi-bin/</code></pre></li>
+<li><p>修改配置文件</p>
+<pre><code>&gt;# vim /etc/httpd/conf.d/web.conf                                          末尾加入以下内容
+
+Listen 8909
+&lt;VirtualHost *:8909&gt;
+DocumentRoot /var/www/webapp0
+ServerName webapp0.example.com
+WSGIScriptAlias / /var/www/webapp0/webinfo.wsgi
+&lt;/VirtualHost&gt;</code></pre></li>
+</ul>
+<ul>
+<li><p>修改 selinux</p>
+<pre><code>&gt;# semanage port -a -t http_port_t -p tcp 8909</code></pre></li>
+<li><p>设置防火墙</p>
+<pre><code>&gt;# firewall-cmd --permanent --add-port=8909/tcp
+&gt;# firewall-cmd --reload</code></pre></li>
+<li><p>重启 apache</p>
+<pre><code>&gt;# systemctl restart httpd</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>配置web内容访问</title>
+    <url>/2019/12/06/%E9%85%8D%E7%BD%AEweb%E5%86%85%E5%AE%B9%E8%AE%BF%E9%97%AE/</url>
+    <content><![CDATA[<h2 id="配置-web-内容访问"><a href="#配置-web-内容访问" class="headerlink" title="配置 web 内容访问"></a>配置 web 内容访问</h2><pre><code>在您的system1上的 web 服务器的 DocumentRoot 目录下创建一个名为private 的目录，要求如下:
+从 http://classroom.example.com/pub/materails/private.html 下载一个文件副本到这个目录，并且命名为 index.html；
+不要对这个文件的内容做任何修改；
+从 system1 上，任何人都可以浏览 private 的内容，但是从其他系统不能访问这个目录的内容</code></pre><hr>
+<ul>
+<li><p>新建文件夹</p>
+<pre><code>&gt;# mkdir /var/www/html/private &amp;&amp; cd /var/www/html/private</code></pre></li>
+<li><p>下载站点文件</p>
+<pre><code>&gt;# wget -O index.html http://classroom.example.com/pub/materails/private.html</code></pre></li>
+<li><p>修改配置文件</p>
+<pre><code>&gt;# vim /etc/httpd/conf.d/web.conf                                      末尾加入以下内容
+
+&lt;Directory &quot;/var/www/html/private&quot;&gt;
+order deny,allow
+deny from all
+allow from 127.0.0.1
+allow from 172.25.0.11                                                 #下面几行都是一样的效果，填一个就行
+allow from system1.example.com
+Require local
+&lt;/Directory&gt;</code></pre></li>
+<li><p>重启 apache</p>
+<pre><code>&gt;# systemctl restart httpd</code></pre></li>
+<li><p>测试</p>
+<pre><code>&gt;# curl http://system1.example.com/private/                                        注意最后一个 / 要打上</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>安全web服务</title>
+    <url>/2019/12/06/%E5%AE%89%E5%85%A8web%E6%9C%8D%E5%8A%A1/</url>
+    <content><![CDATA[<h2 id="配置安全-web-服务"><a href="#配置安全-web-服务" class="headerlink" title="配置安全 web 服务"></a>配置安全 web 服务</h2><pre><code>为站点 http://system1.example.com 配置 TLS 加密:
+已签名证书从 http://classroom.example.com/pub/tls/certs/system1.crt 获取 ；
+证书的密钥从 http://classroom.example.com/pub/tls/private/system1.key 获取；
+证书的签名授权信息从 http://classroom.example.com/pub/example-ca.crt 获取。</code></pre><hr>
+<ul>
+<li><p>安装认证软件</p>
+<pre><code>&gt;# yum install mod_ssl –y</code></pre></li>
+<li><p>下载证书和密钥</p>
+<pre><code>&gt;# mkdir /etc/httpd/cert &amp;&amp; cd /etc/httpd/cert
+&gt;# wget http://classroom.example.com/pub/tls/certs/system1.crt
+&gt;# wget http://classroom.example.com/pub/tls/private/system1.key
+&gt;# wget http://classroom.example.com/pub/example-ca.crt</code></pre></li>
+<li><p>修改 ssl.conf 配置文件</p>
+<pre><code>&gt;# vim /etc/httpd/conf.d/ssl.conf
+
+SSLCertificateFile /etc/httpd/cert/system1.crt                                       第 100 行
+SSLCertificateKeyFile /etc/httpd/cert/system1.key                                    第 107 行
+SSLCACertificateFile /etc/httpd/cert/example-ca.crt                                  第 122 行</code></pre></li>
+<li><p>设置防火墙</p>
+<pre><code>&gt;# firewall-cmd --permanent --add-service=https
+&gt;# firewall-cmd --reload</code></pre></li>
+<li><p>重启服务</p>
+<pre><code>&gt;# systemctl restart httpd.service</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>web虚拟主机</title>
+    <url>/2019/12/06/web%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA/</url>
+    <content><![CDATA[<h2 id="扩展-web-服务器-–-配置虚拟主机"><a href="#扩展-web-服务器-–-配置虚拟主机" class="headerlink" title="扩展 web 服务器 – 配置虚拟主机"></a>扩展 web 服务器 – 配置虚拟主机</h2><pre><code>在system1上扩展您的 web 服务器，为站点 http://www0.example.com创建一个虚拟主机，然后执行下述步骤:
+设置 DocumentRoot 为/var/www/virtual；
+从 http://classroom.example.com/pub/materials/www.html 下载文件并重命名为index.html；
+不要对文件 index.html 的内容做任何修改；
+将文件 index.html 放到虚拟主机的 DocumentRoot 目录下；
+确保 student 用户能够在/var/www/virtual 目录下创建文件；
+注意：原始站点 http://system1.example.com 必须仍然能够访问，名称服务器 example.com 提供对主机名 www0.example.com 的域名解析</code></pre><hr>
+<ul>
+<li><p>新建文件夹</p>
+<pre><code>&gt;# mkdir /var/www/virtual</code></pre></li>
+<li><p>下载站点文件</p>
+<pre><code>&gt;# wget -O /var/www/virtual/index.html http://classroom.example.com/pub/materials/www.html</code></pre></li>
+<li><p>修改文件夹权限</p>
+<pre><code>&gt;# setfacl -m u:student:rwx /var/www/virtual/</code></pre></li>
+<li><p>配置虚拟主机</p>
+<pre><code>&gt;# vim /etc/httpd/conf.d/web.conf                               末尾加入以下内容
+
+&lt;VirtualHost *:80&gt;
+DocumentRoot /var/www/virtual
+ServerName www0.example.com
+&lt;/VirtualHost&gt;</code></pre></li>
+<li><p>重启 apache 服务</p>
+<pre><code>&gt;# systemctl restart httpd</code></pre></li>
+<li><p>测试</p>
+<pre><code>&gt;# curl www0.example.com                                                        这里需要在 classroom 机器上测试</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>实现web服务器</title>
+    <url>/2019/12/06/%E5%AE%9E%E7%8E%B0web%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="实现-web-服务器"><a href="#实现-web-服务器" class="headerlink" title="实现 web 服务器"></a>实现 web 服务器</h2><pre><code>为 http://system1.example.com 配置 Web 服务器:
+从 http://classroom.example.com/pub/materials/station.html 下载一个主页文件，并将该文件重命名为 index.html；
+将文件 index.html 拷贝到您的 web 服务器的 DocumentRoot 目录下；
+不要对文件 index.html 的内容进行任何修改；
+来自于 example.com 域的客户端可以访问此 Web 服务；
+来自于 my133t.org 域的客户端拒绝访问此 Web 服务。</code></pre><hr>
+<ul>
+<li><p>安装 apache 软件包</p>
+<pre><code>&gt;# yum -y install httpd</code></pre></li>
+<li><p>下载主页文件</p>
+<pre><code>&gt;# wget http://classroom.example.com/pub/materials/station.html -O /var/www/html/index.html</code></pre></li>
+<li><p>修改配置文件</p>
+<pre><code>&gt;# vim /etc/httpd/conf.d/web.conf
+
+&lt;Virtualhost *:80&gt;
+DocumentRoot /var/www/html
+ServerName system1.example.com
+&lt;Directory &quot;/var/www/html&quot;&gt;
+order deny,allow
+deny from .my133t.org
+allow from .example.com
+&lt;/Directory&gt;
+&lt;/Virtualhost&gt;</code></pre></li>
+<li><p>设置防火墙</p>
+<pre><code>&gt;# firewall-cmd --permanent --add-service=http
+&gt;# firewall-cmd --reload</code></pre></li>
+<li><p>启动服务</p>
+<pre><code>&gt;# systemctl enable httpd.service
+&gt;# systemctl start httpd.service</code></pre></li>
+<li><p>测试访问</p>
+<pre><code>&gt;# curl http://system1.example.com</code></pre></li>
+</ul>
+<p><strong>finish</strong></p>
+]]></content>
+      <categories>
+        <category>RHCE</category>
+      </categories>
+  </entry>
+  <entry>
     <title>nfs配置</title>
     <url>/2019/12/03/nfs%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h2 id="NFS-共享配置"><a href="#NFS-共享配置" class="headerlink" title="NFS 共享配置"></a>NFS 共享配置</h2><pre><code>在system1配置 NFS 服务，要求如下:
