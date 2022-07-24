@@ -3,11 +3,11 @@
   <title>那个人</title>
   
   
-  <link href="atom.xml" rel="self"/>
+  <link href="https://way-ww-new.github.io/atom.xml" rel="self"/>
   
-  <link href="https://blog.wayww.cn/"/>
+  <link href="https://way-ww-new.github.io/"/>
   <updated>2021-07-02T02:11:39.000Z</updated>
-  <id>https://blog.wayww.cn/</id>
+  <id>https://way-ww-new.github.io/</id>
   
   <author>
     <name>wayaw</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="/4a17b156/"/>
-    <id>/4a17b156/</id>
+    <link href="https://way-ww-new.github.io/4a17b156/"/>
+    <id>https://way-ww-new.github.io/4a17b156/</id>
     <published>2022-07-24T14:29:17.772Z</published>
     <updated>2021-07-02T02:11:39.000Z</updated>
     
@@ -38,8 +38,8 @@
   
   <entry>
     <title>archives</title>
-    <link href="/19051/"/>
-    <id>/19051/</id>
+    <link href="https://way-ww-new.github.io/19051/"/>
+    <id>https://way-ww-new.github.io/19051/</id>
     <published>2022-07-17T17:06:25.000Z</published>
     <updated>2022-07-17T17:09:25.391Z</updated>
     
@@ -51,8 +51,8 @@
   
   <entry>
     <title>linuxdeploy无法启动MySQL</title>
-    <link href="/b4cac3e6/"/>
-    <id>/b4cac3e6/</id>
+    <link href="https://way-ww-new.github.io/b4cac3e6/"/>
+    <id>https://way-ww-new.github.io/b4cac3e6/</id>
     <published>2019-10-14T04:07:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -67,17 +67,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Centos7 安装 vsftp</title>
-    <link href="/bda00998/"/>
-    <id>/bda00998/</id>
+    <link href="https://way-ww-new.github.io/bda00998/"/>
+    <id>https://way-ww-new.github.io/bda00998/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -91,17 +91,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Centos7 配置阿里 yum 源</title>
-    <link href="/a431c5ec/"/>
-    <id>/a431c5ec/</id>
+    <link href="https://way-ww-new.github.io/a431c5ec/"/>
+    <id>https://way-ww-new.github.io/a431c5ec/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -116,17 +116,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Failed to recive sock4 connect request ack</title>
-    <link href="/12dacc4c/"/>
-    <id>/12dacc4c/</id>
+    <link href="https://way-ww-new.github.io/12dacc4c/"/>
+    <id>https://way-ww-new.github.io/12dacc4c/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -142,17 +142,17 @@
     
     
     
-    <category term="Archlinux" scheme="categories/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/categories/Archlinux/"/>
     
     
-    <category term="Archlinux" scheme="tags/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/tags/Archlinux/"/>
     
   </entry>
   
   <entry>
     <title>Hexo 部署报错 permission denied</title>
-    <link href="/92cbaf29/"/>
-    <id>/92cbaf29/</id>
+    <link href="https://way-ww-new.github.io/92cbaf29/"/>
+    <id>https://way-ww-new.github.io/92cbaf29/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -171,17 +171,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Nginx 安装记录</title>
-    <link href="/f6892ceb/"/>
-    <id>/f6892ceb/</id>
+    <link href="https://way-ww-new.github.io/f6892ceb/"/>
+    <id>https://way-ww-new.github.io/f6892ceb/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -196,17 +196,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>RHCE 简单脚本</title>
-    <link href="/1850408d/"/>
-    <id>/1850408d/</id>
+    <link href="https://way-ww-new.github.io/1850408d/"/>
+    <id>https://way-ww-new.github.io/1850408d/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -220,19 +220,19 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="RHCE" scheme="tags/RHCE/"/>
+    <category term="RHCE" scheme="https://way-ww-new.github.io/tags/RHCE/"/>
     
   </entry>
   
   <entry>
     <title>RedHat7 修改 root 密码</title>
-    <link href="/e77896bc/"/>
-    <id>/e77896bc/</id>
+    <link href="https://way-ww-new.github.io/e77896bc/"/>
+    <id>https://way-ww-new.github.io/e77896bc/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -249,19 +249,19 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="RHCE" scheme="tags/RHCE/"/>
+    <category term="RHCE" scheme="https://way-ww-new.github.io/tags/RHCE/"/>
     
   </entry>
   
   <entry>
     <title>RedHat 设置 selinux</title>
-    <link href="/7fe450cb/"/>
-    <id>/7fe450cb/</id>
+    <link href="https://way-ww-new.github.io/7fe450cb/"/>
+    <id>https://way-ww-new.github.io/7fe450cb/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -275,19 +275,19 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="RHCE" scheme="tags/RHCE/"/>
+    <category term="RHCE" scheme="https://way-ww-new.github.io/tags/RHCE/"/>
     
   </entry>
   
   <entry>
     <title>alias 命令别名</title>
-    <link href="/4fe171be/"/>
-    <id>/4fe171be/</id>
+    <link href="https://way-ww-new.github.io/4fe171be/"/>
+    <id>https://way-ww-new.github.io/4fe171be/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -305,19 +305,19 @@
     
     
     
-    <category term="Command" scheme="categories/Command/"/>
+    <category term="Command" scheme="https://way-ww-new.github.io/categories/Command/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Command" scheme="tags/Command/"/>
+    <category term="Command" scheme="https://way-ww-new.github.io/tags/Command/"/>
     
   </entry>
   
   <entry>
     <title>Archlinux 搜狗输入法崩溃</title>
-    <link href="/4ea9ff86/"/>
-    <id>/4ea9ff86/</id>
+    <link href="https://way-ww-new.github.io/4ea9ff86/"/>
+    <id>https://way-ww-new.github.io/4ea9ff86/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -333,19 +333,19 @@
     
     
     
-    <category term="Archlinux" scheme="categories/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/categories/Archlinux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Archlinux" scheme="tags/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/tags/Archlinux/"/>
     
   </entry>
   
   <entry>
     <title>Archlinux 安装 windows 字体</title>
-    <link href="/c25e56ca/"/>
-    <id>/c25e56ca/</id>
+    <link href="https://way-ww-new.github.io/c25e56ca/"/>
+    <id>https://way-ww-new.github.io/c25e56ca/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -361,19 +361,19 @@
     
     
     
-    <category term="Archlinux" scheme="categories/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/categories/Archlinux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Archlinux" scheme="tags/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/tags/Archlinux/"/>
     
   </entry>
   
   <entry>
     <title>Archlinux 安装搜狗输入法</title>
-    <link href="/79d76506/"/>
-    <id>/79d76506/</id>
+    <link href="https://way-ww-new.github.io/79d76506/"/>
+    <id>https://way-ww-new.github.io/79d76506/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -389,19 +389,19 @@
     
     
     
-    <category term="Archlinux" scheme="categories/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/categories/Archlinux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Archlinux" scheme="tags/Archlinux/"/>
+    <category term="Archlinux" scheme="https://way-ww-new.github.io/tags/Archlinux/"/>
     
   </entry>
   
   <entry>
     <title>Centos7 安装 Mysql</title>
-    <link href="/7777a9fa/"/>
-    <id>/7777a9fa/</id>
+    <link href="https://way-ww-new.github.io/7777a9fa/"/>
+    <id>https://way-ww-new.github.io/7777a9fa/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -416,19 +416,19 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Mysql" scheme="tags/Mysql/"/>
+    <category term="Mysql" scheme="https://way-ww-new.github.io/tags/Mysql/"/>
     
   </entry>
   
   <entry>
     <title>Centos7 设置时区和时间同步</title>
-    <link href="/390c8d32/"/>
-    <id>/390c8d32/</id>
+    <link href="https://way-ww-new.github.io/390c8d32/"/>
+    <id>https://way-ww-new.github.io/390c8d32/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -449,17 +449,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Linux 命令 -- cp</title>
-    <link href="/3354cd2f/"/>
-    <id>/3354cd2f/</id>
+    <link href="https://way-ww-new.github.io/3354cd2f/"/>
+    <id>https://way-ww-new.github.io/3354cd2f/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -473,19 +473,19 @@
     
     
     
-    <category term="Command" scheme="categories/Command/"/>
+    <category term="Command" scheme="https://way-ww-new.github.io/categories/Command/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Command" scheme="tags/Command/"/>
+    <category term="Command" scheme="https://way-ww-new.github.io/tags/Command/"/>
     
   </entry>
   
   <entry>
     <title>Debian 安装 php7.2</title>
-    <link href="/c86d5bc/"/>
-    <id>/c86d5bc/</id>
+    <link href="https://way-ww-new.github.io/c86d5bc/"/>
+    <id>https://way-ww-new.github.io/c86d5bc/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -500,17 +500,17 @@
     
     
     
-    <category term="Linux" scheme="categories/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/categories/Linux/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
   </entry>
   
   <entry>
     <title>Docker 简明记录</title>
-    <link href="/a7c9ce0d/"/>
-    <id>/a7c9ce0d/</id>
+    <link href="https://way-ww-new.github.io/a7c9ce0d/"/>
+    <id>https://way-ww-new.github.io/a7c9ce0d/</id>
     <published>2019-10-14T03:50:32.000Z</published>
     <updated>2021-07-02T02:09:04.000Z</updated>
     
@@ -524,12 +524,12 @@
     
     
     
-    <category term="Docker" scheme="categories/Docker/"/>
+    <category term="Docker" scheme="https://way-ww-new.github.io/categories/Docker/"/>
     
     
-    <category term="Linux" scheme="tags/Linux/"/>
+    <category term="Linux" scheme="https://way-ww-new.github.io/tags/Linux/"/>
     
-    <category term="Docker" scheme="tags/Docker/"/>
+    <category term="Docker" scheme="https://way-ww-new.github.io/tags/Docker/"/>
     
   </entry>
   
