@@ -554,31 +554,6 @@
     
     
     <entry>
-      <title>Frp 免费内网穿透</title>
-      <link href="//972cb8f7/"/>
-      <url>//972cb8f7/</url>
-      
-        <content type="html"><![CDATA[<p>frp免费内网穿透 <a href="https://www.natfrp.com/">https://www.natfrp.com</a> 免费提供五条免费映射隧道用于内网穿透，且注册和使用都很简单方便，详细信息可自行访问。</p><p>注册登录后点击左侧的仪表盘可以查看自己的使用信息和可选的服务器信息</p><p>然后点击左侧的映射列表，可以进行隧道管理，添加所需要的映射隧道，相关信息页面的提示也很清楚</p><p>添加完成后，服务端的免费映射隧道就已经创建完毕，下面开始客户端的设置</p><p>同样是点击左侧的客户端软件，下载对应的版本客户端到本地的需要进行内网穿透的服务器中，解压运行，按照提示登录账号，选择服务器即可完成设置。只有俩三步，很快就设置好了</p><p>还有域名绑定（自己申请的）直接解析cname到映射的服务器地址上，即可完成域名访问。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Linux </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Firewall 富规则</title>
       <link href="//4f3be07e/"/>
       <url>//4f3be07e/</url>
@@ -598,6 +573,31 @@
             <tag> Linux </tag>
             
             <tag> RHCE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Frp 免费内网穿透</title>
+      <link href="//972cb8f7/"/>
+      <url>//972cb8f7/</url>
+      
+        <content type="html"><![CDATA[<p>frp免费内网穿透 <a href="https://www.natfrp.com/">https://www.natfrp.com</a> 免费提供五条免费映射隧道用于内网穿透，且注册和使用都很简单方便，详细信息可自行访问。</p><p>注册登录后点击左侧的仪表盘可以查看自己的使用信息和可选的服务器信息</p><p>然后点击左侧的映射列表，可以进行隧道管理，添加所需要的映射隧道，相关信息页面的提示也很清楚</p><p>添加完成后，服务端的免费映射隧道就已经创建完毕，下面开始客户端的设置</p><p>同样是点击左侧的客户端软件，下载对应的版本客户端到本地的需要进行内网穿透的服务器中，解压运行，按照提示登录账号，选择服务器即可完成设置。只有俩三步，很快就设置好了</p><p>还有域名绑定（自己申请的）直接解析cname到映射的服务器地址上，即可完成域名访问。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
             
         </tags>
       
@@ -764,33 +764,6 @@
     
     
     <entry>
-      <title>mariadb 简单配置</title>
-      <link href="//921d9bcb/"/>
-      <url>//921d9bcb/</url>
-      
-        <content type="html"><![CDATA[<h2 id="Mariadb-数据库配置"><a href="#Mariadb-数据库配置" class="headerlink" title="Mariadb 数据库配置"></a>Mariadb 数据库配置</h2><pre><code>    在system1上创建一个 MariaDB 数据库，名为 Contacts，并符合以下条件:    数据库应该包含来自数据库复制的内容，复制文件的 URL 为:http://classroom.example.com/pub/materials/users.sql:    数据库只能被 localhost 访问；    除了 root 用户，此数据库只能被用户 Raikon 查询，此用户密码为 atenorth ， root 用户的密码为 atenorth，同时不允许空密码登陆。    在系统 system1上使用数据库 Contacts，并使用相应的 SQL 查询以回答下列问题:    密码是 solicitous 的人的名字?    有多少人的姓名是 Barbara 同时居住在 Sunnyvale?</code></pre><hr><ul><li><p>安装数据库</p><pre><code>  &gt;# yum install -y mariadb-server mariadb</code></pre></li><li><p>启动数据库</p><pre><code>  &gt;# systemctl enable mariadb  &gt;# systemctl start mariadb</code></pre></li><li><p>设置防火墙</p><pre><code>  &gt;# firewall-cmd --permanent --add-service=mysql  &gt;# firewall-cmd --reload</code></pre></li><li><p>数据库安全控制</p><pre><code>  &gt;# mysql_secure_installation  &gt; 全部选择 Y ，并在设置 root 密码那一步设置题目要求的密码</code></pre></li><li><p>root 用户登录数据库并完成新建数据库的要求</p><pre><code> &gt;# wget http://classroom.example.com/pub/materials/users.sql    下载题目文件 &gt;# mysql -uroot -p                                              注意 -u 和用户名之间建议连在一起写，即 -uroot 和 -uRaikon &gt; CREATE DATABASE Contacts;                                     新建 Contacts 数据库 &gt; USE Contacts;                                                 进入 Contacts 数据库 &gt; source /root/users.sql;                                       导入数据 &gt; show tables;                                                  查看是否有数据导入</code></pre></li><li><p>设置 Raikon 等用户权限</p><pre><code>  &gt; GRANT select ON Contacts.* to Raikon@localhost IDENTIFIED BY &#39;atenorth&#39;;  &gt; DELETE FROM mysql.user WHERE Password=&#39;&#39;;                     删除空用户密码  &gt; exit                                                          退出数据库  &gt; mysql -uRaikon -p                                             测试 Raikon 用户登录权限</code></pre></li><li><p>数据库查询</p><pre><code>  &gt; SELECT name FROM base WHERE password=&#39;solicitous&#39;;  &gt; SELECT count(*) FROM base,location WHERE base.name=&#39;Barbara&#39; AND location.city=&#39;Sunnyvale&#39; AND base.id=location.id ;</code></pre></li></ul><p><strong>finish</strong></p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Linux </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
-            
-            <tag> RHCE </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Linux 命令 -- lsof</title>
       <link href="//aa81bac1/"/>
       <url>//aa81bac1/</url>
@@ -810,6 +783,33 @@
             <tag> Linux </tag>
             
             <tag> Command </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mariadb 简单配置</title>
+      <link href="//921d9bcb/"/>
+      <url>//921d9bcb/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Mariadb-数据库配置"><a href="#Mariadb-数据库配置" class="headerlink" title="Mariadb 数据库配置"></a>Mariadb 数据库配置</h2><pre><code>    在system1上创建一个 MariaDB 数据库，名为 Contacts，并符合以下条件:    数据库应该包含来自数据库复制的内容，复制文件的 URL 为:http://classroom.example.com/pub/materials/users.sql:    数据库只能被 localhost 访问；    除了 root 用户，此数据库只能被用户 Raikon 查询，此用户密码为 atenorth ， root 用户的密码为 atenorth，同时不允许空密码登陆。    在系统 system1上使用数据库 Contacts，并使用相应的 SQL 查询以回答下列问题:    密码是 solicitous 的人的名字?    有多少人的姓名是 Barbara 同时居住在 Sunnyvale?</code></pre><hr><ul><li><p>安装数据库</p><pre><code>  &gt;# yum install -y mariadb-server mariadb</code></pre></li><li><p>启动数据库</p><pre><code>  &gt;# systemctl enable mariadb  &gt;# systemctl start mariadb</code></pre></li><li><p>设置防火墙</p><pre><code>  &gt;# firewall-cmd --permanent --add-service=mysql  &gt;# firewall-cmd --reload</code></pre></li><li><p>数据库安全控制</p><pre><code>  &gt;# mysql_secure_installation  &gt; 全部选择 Y ，并在设置 root 密码那一步设置题目要求的密码</code></pre></li><li><p>root 用户登录数据库并完成新建数据库的要求</p><pre><code> &gt;# wget http://classroom.example.com/pub/materials/users.sql    下载题目文件 &gt;# mysql -uroot -p                                              注意 -u 和用户名之间建议连在一起写，即 -uroot 和 -uRaikon &gt; CREATE DATABASE Contacts;                                     新建 Contacts 数据库 &gt; USE Contacts;                                                 进入 Contacts 数据库 &gt; source /root/users.sql;                                       导入数据 &gt; show tables;                                                  查看是否有数据导入</code></pre></li><li><p>设置 Raikon 等用户权限</p><pre><code>  &gt; GRANT select ON Contacts.* to Raikon@localhost IDENTIFIED BY &#39;atenorth&#39;;  &gt; DELETE FROM mysql.user WHERE Password=&#39;&#39;;                     删除空用户密码  &gt; exit                                                          退出数据库  &gt; mysql -uRaikon -p                                             测试 Raikon 用户登录权限</code></pre></li><li><p>数据库查询</p><pre><code>  &gt; SELECT name FROM base WHERE password=&#39;solicitous&#39;;  &gt; SELECT count(*) FROM base,location WHERE base.name=&#39;Barbara&#39; AND location.city=&#39;Sunnyvale&#39; AND base.id=location.id ;</code></pre></li></ul><p><strong>finish</strong></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> RHCE </tag>
             
         </tags>
       
@@ -926,6 +926,31 @@
     
     
     <entry>
+      <title>Samba 文件共享服务</title>
+      <link href="//b902a5ac/"/>
+      <url>//b902a5ac/</url>
+      
+        <content type="html"><![CDATA[<p>软件包</p><p>####centos</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>####debian</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>守护进程</p><p>smb（smbd）</p><p>提供文件共享和打印机共享</p><p>提供用户权限的认证和解锁</p><p>tcp 139 445</p><p>nmb（nmbd）</p><p>提供NETBIOS名称解析服务</p><p>Common Internet File System （cifs） mount.cifs 由cifs-utils包提供</p><p>udp 137</p><p>快速配置</p><p>服务端</p><p>安装Samba软件包</p><p>创建共享目录</p><p>修改配置文件（&#x2F;etc&#x2F;samba&#x2F;smb.conf) debian上的配置文件是&#x2F;etc&#x2F;smb.conf</p><p>vim &#x2F;etc&#x2F;samba&#x2F;smb.conf</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[share] #共享名称</span><br><span class="line">comment = share for mysel #共享描述</span><br><span class="line">path = /common #之前创建的共享目录</span><br><span class="line">browseable = YES #所有人可见</span><br><span class="line">guest ok = NO #拒绝匿名用户访问</span><br><span class="line">writable = YES #数据可写</span><br></pre></td></tr></table></figure><p>修改selinux上下文权限(可能会需要在selinux是enforcing状态下修改)</p><p>chcon -t samba_share_t &#x2F;common</p><p>创建Samba共享访问账户</p><p>useradd -s &#x2F;sbin&#x2F;nologin harry</p><p>smbpasswd -a harry</p><p>-a 添加Samba账户并设置密码</p><p>-x 删除Samba用户</p><p>-d 禁用Samba账户</p><p>-e 启用Samba账户</p><p>启动服务</p><p>systemctl restart smb nmb</p><p>systemctl enable smb nmb</p><p>设置防火墙</p><p>firewall-cmd –permanent –add-service&#x3D;samba</p><p>firewall-cmd –reload</p><p>setenforce 0 (或者vim &#x2F;etc&#x2F;selinux&#x2F;config设置为disable并重启)</p><p>客户端</p><p>Windows开启网络映射方便使用</p><p>Linux桌面客户端同样容易连接</p><p>Android使用es文件浏览器访问</p><p>Linux 命令行：</p><p>登录：smbclient -U harry &#x2F;&#x2F;192.168.x.x &#x2F;common</p><p>挂载：yum install cifs-utils</p><p>mount.cifs &#x2F;&#x2F;192.168.x.x  &#x2F;common &#x2F;mnt&#x2F;smbshare -o user&#x3D;harry</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Linux 命令 -- scp</title>
       <link href="//542c15c7/"/>
       <url>//542c15c7/</url>
@@ -945,31 +970,6 @@
             <tag> Linux </tag>
             
             <tag> Command </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Samba 文件共享服务</title>
-      <link href="//b902a5ac/"/>
-      <url>//b902a5ac/</url>
-      
-        <content type="html"><![CDATA[<p>软件包</p><p>####centos</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>####debian</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>守护进程</p><p>smb（smbd）</p><p>提供文件共享和打印机共享</p><p>提供用户权限的认证和解锁</p><p>tcp 139 445</p><p>nmb（nmbd）</p><p>提供NETBIOS名称解析服务</p><p>Common Internet File System （cifs） mount.cifs 由cifs-utils包提供</p><p>udp 137</p><p>快速配置</p><p>服务端</p><p>安装Samba软件包</p><p>创建共享目录</p><p>修改配置文件（&#x2F;etc&#x2F;samba&#x2F;smb.conf) debian上的配置文件是&#x2F;etc&#x2F;smb.conf</p><p>vim &#x2F;etc&#x2F;samba&#x2F;smb.conf</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[share] #共享名称</span><br><span class="line">comment = share for mysel #共享描述</span><br><span class="line">path = /common #之前创建的共享目录</span><br><span class="line">browseable = YES #所有人可见</span><br><span class="line">guest ok = NO #拒绝匿名用户访问</span><br><span class="line">writable = YES #数据可写</span><br></pre></td></tr></table></figure><p>修改selinux上下文权限(可能会需要在selinux是enforcing状态下修改)</p><p>chcon -t samba_share_t &#x2F;common</p><p>创建Samba共享访问账户</p><p>useradd -s &#x2F;sbin&#x2F;nologin harry</p><p>smbpasswd -a harry</p><p>-a 添加Samba账户并设置密码</p><p>-x 删除Samba用户</p><p>-d 禁用Samba账户</p><p>-e 启用Samba账户</p><p>启动服务</p><p>systemctl restart smb nmb</p><p>systemctl enable smb nmb</p><p>设置防火墙</p><p>firewall-cmd –permanent –add-service&#x3D;samba</p><p>firewall-cmd –reload</p><p>setenforce 0 (或者vim &#x2F;etc&#x2F;selinux&#x2F;config设置为disable并重启)</p><p>客户端</p><p>Windows开启网络映射方便使用</p><p>Linux桌面客户端同样容易连接</p><p>Android使用es文件浏览器访问</p><p>Linux 命令行：</p><p>登录：smbclient -U harry &#x2F;&#x2F;192.168.x.x &#x2F;common</p><p>挂载：yum install cifs-utils</p><p>mount.cifs &#x2F;&#x2F;192.168.x.x  &#x2F;common &#x2F;mnt&#x2F;smbshare -o user&#x3D;harry</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Linux </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
             
         </tags>
       
