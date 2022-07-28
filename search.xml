@@ -554,6 +554,31 @@
     
     
     <entry>
+      <title>Frp 免费内网穿透</title>
+      <link href="//972cb8f7/"/>
+      <url>//972cb8f7/</url>
+      
+        <content type="html"><![CDATA[<p>frp免费内网穿透 <a href="https://www.natfrp.com/">https://www.natfrp.com</a> 免费提供五条免费映射隧道用于内网穿透，且注册和使用都很简单方便，详细信息可自行访问。</p><p>注册登录后点击左侧的仪表盘可以查看自己的使用信息和可选的服务器信息</p><p>然后点击左侧的映射列表，可以进行隧道管理，添加所需要的映射隧道，相关信息页面的提示也很清楚</p><p>添加完成后，服务端的免费映射隧道就已经创建完毕，下面开始客户端的设置</p><p>同样是点击左侧的客户端软件，下载对应的版本客户端到本地的需要进行内网穿透的服务器中，解压运行，按照提示登录账号，选择服务器即可完成设置。只有俩三步，很快就设置好了</p><p>还有域名绑定（自己申请的）直接解析cname到映射的服务器地址上，即可完成域名访问。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Firewall 富规则</title>
       <link href="//4f3be07e/"/>
       <url>//4f3be07e/</url>
@@ -573,31 +598,6 @@
             <tag> Linux </tag>
             
             <tag> RHCE </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Frp 免费内网穿透</title>
-      <link href="//972cb8f7/"/>
-      <url>//972cb8f7/</url>
-      
-        <content type="html"><![CDATA[<p>frp免费内网穿透 <a href="https://www.natfrp.com/">https://www.natfrp.com</a> 免费提供五条免费映射隧道用于内网穿透，且注册和使用都很简单方便，详细信息可自行访问。</p><p>注册登录后点击左侧的仪表盘可以查看自己的使用信息和可选的服务器信息</p><p>然后点击左侧的映射列表，可以进行隧道管理，添加所需要的映射隧道，相关信息页面的提示也很清楚</p><p>添加完成后，服务端的免费映射隧道就已经创建完毕，下面开始客户端的设置</p><p>同样是点击左侧的客户端软件，下载对应的版本客户端到本地的需要进行内网穿透的服务器中，解压运行，按照提示登录账号，选择服务器即可完成设置。只有俩三步，很快就设置好了</p><p>还有域名绑定（自己申请的）直接解析cname到映射的服务器地址上，即可完成域名访问。</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Linux </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
             
         </tags>
       
@@ -764,33 +764,6 @@
     
     
     <entry>
-      <title>Linux 命令 -- lsof</title>
-      <link href="//aa81bac1/"/>
-      <url>//aa81bac1/</url>
-      
-        <content type="html"><![CDATA[<p>lsof (list open files)是一个列出当前系统打开文件的工具。在Linux环境下，任何事物都是以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络链接和硬件。所以如传输控制协议（tcp）和用户数据报协议（udp）套接字等，系统在后台为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序于基础操作系统之间的交互提供了通用的接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能查看这个列表对系统监测以及排错将是有很大帮助的。</p><p>命令格式</p><p>lsof [参数] [文件]</p><p>命令功能</p><p>用于查看进程打开的文件，端口。找回、恢复删除的文件。</p><p>命令参数</p><p>-a 列出打开文件存在的进程</p><p>-c&lt;进程名&gt; 列出指定进程打开的文件</p><p>-g 列出GID号进程详情</p><p>+d&lt;目录&gt; 列出目录下被打开的文件</p><p>+D&lt;目录&gt; 递归列出目录下被打开的文件</p><p>-i 列出符合条件的进程（4、6、协议、端口、@ip）</p><p>示例</p><ol><li><p>不加参数</p><p> root@debian:~# lsof | head -n 20<br> COMMAND   PID TID TASKCMD               USER   FD      TYPE     DEVICE SIZE&#x2F;OFF       NODE NAME<br> systemd     1                           root  cwd       DIR      254,1     4096          2 &#x2F;<br> systemd     1                           root  rtd       DIR      254,1     4096          2 &#x2F;<br> systemd     1                           root  txt       REG      254,1  1443404     662341 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;systemd<br> systemd     1                           root  mem       REG      254,1  1066528     656039 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libm-2.28.so<br> systemd     1                           root  mem       REG      254,1   153068     659481 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libudev.so.1.6.13<br> systemd     1                           root  mem       REG      254,1   144840     656311 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libgpg-error.so.0.26.1<br> systemd     1                           root  mem       REG      254,1    46404     659376 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libjson-c.so.3.0.1<br> systemd     1                           root  mem       REG      254,1    50568     659375 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libargon2.so.1<br> systemd     1                           root  mem       REG      254,1   401416     656842 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libdevmapper.so.1.02.1<br> systemd     1                           root  mem       REG      254,1    34192     658756 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libuuid.so.1.3.0<br> systemd     1                           root  mem       REG      254,1    21812     655781 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libattr.so.1.1.2448<br> systemd     1                           root  mem       REG      254,1  2868032     659391 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libcrypto.so.1.1<br> systemd     1                           root  mem       REG      254,1   614756     659392 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libssl.so.1.1<br> systemd     1                           root  mem       REG      254,1    26136     655697 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libcap-ng.so.0.0.0<br> systemd     1                           root  mem       REG      254,1    17924     656038 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libdl-2.28.so<br> systemd     1                           root  mem       REG      254,1   488784     655764 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libpcre.so.3.13.3<br> systemd     1                           root  mem       REG      254,1   149124     656053 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libpthread-2.28.so<br> systemd     1                           root  mem       REG      254,1   378732     657121 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libblkid.so.1.1.0<br> systemd     1                           root  mem       REG      254,1   124444     656362 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;liblz4.so.1.8.3</p></li></ol><p>说明：</p><p>COMMAND：进程名称</p><p>PID：进程标识符</p><p>PPID：父进程标识符（需要指定-R参数）</p><p>USER：进程所有者</p><p>PGID：进程所属组</p><p>FD：文件描述符，应用程序通过文件描述符识别该文件</p><p>2）列出某个文件相关进程</p><pre><code>root@debian:~# lsof /bin/bashCOMMAND PID USER  FD   TYPE DEVICE SIZE/OFF   NODE NAMEbash    452   ww txt    REG  254,1  1302248 656751 /usr/bin/bashbash    458 root txt    REG  254,1  1302248 656751 /usr/bin/bash</code></pre><p>3）列出某个进程打开的文件</p><pre><code>COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAMEbash    452   ww  cwd    DIR  254,1     4096 797082 /home/wwbash    452   ww  rtd    DIR  254,1     4096      2 /bash    452   ww  txt    REG  254,1  1302248 656751 /usr/bin/bashbash    452   ww  mem    REG  254,1    54908 656047 /usr/lib/i386-linux-gnu/libnss_files-2.28.sobash    452   ww  mem    REG  254,1    26400 658382 /usr/lib/i386-linux-gnu/gconv/gconv-modules.cachebash    452   ww  mem    REG  254,1  3246832 655804 /usr/lib/locale/locale-archivebash    452   ww  mem    REG  254,1  1947056 656036 /usr/lib/i386-linux-gnu/libc-2.28.sobash    452   ww  mem    REG  254,1    17924 656038 /usr/lib/i386-linux-gnu/libdl-2.28.sobash    452   ww  mem    REG  254,1   161928 656345 /usr/lib/i386-linux-gnu/libtinfo.so.6.1bash    452   ww  mem    REG  254,1   167244 655375 /usr/lib/i386-linux-gnu/ld-2.28.sobash    452   ww    0u   CHR  136,0      0t0      3 /dev/pts/0bash    452   ww    1u   CHR  136,0      0t0      3 /dev/pts/0bash    452   ww    2u   CHR  136,0      0t0      3 /dev/pts/0bash    452   ww  255u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root  cwd    DIR  254,1     4096 917506 /rootbash    458 root  rtd    DIR  254,1     4096      2 /bash    458 root  txt    REG  254,1  1302248 656751 /usr/bin/bashbash    458 root  mem    REG  254,1   149124 656053 /usr/lib/i386-linux-gnu/libpthread-2.28.sobash    458 root  mem    REG  254,1    38868 656055 /usr/lib/i386-linux-gnu/librt-2.28.sobash    458 root  mem    REG  254,1   285204 665107 /usr/lib/i386-linux-gnu/libnss_systemd.so.2bash    458 root  mem    REG  254,1    54908 656047 /usr/lib/i386-linux-gnu/libnss_files-2.28.sobash    458 root  mem    REG  254,1    26400 658382 /usr/lib/i386-linux-gnu/gconv/gconv-modules.cachebash    458 root  mem    REG  254,1  3246832 655804 /usr/lib/locale/locale-archivebash    458 root  mem    REG  254,1  1947056 656036 /usr/lib/i386-linux-gnu/libc-2.28.sobash    458 root  mem    REG  254,1    17924 656038 /usr/lib/i386-linux-gnu/libdl-2.28.sobash    458 root  mem    REG  254,1   161928 656345 /usr/lib/i386-linux-gnu/libtinfo.so.6.1bash    458 root  mem    REG  254,1   167244 655375 /usr/lib/i386-linux-gnu/ld-2.28.sobash    458 root    0u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root    1u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root    2u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root  255u   CHR  136,0      0t0      3 /dev/pts/0</code></pre><p>4）列出打开某个端口的进程</p><pre><code>root@debian:~# lsof -i :22COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAMEsshd    365 root    3u  IPv4  15176      0t0  TCP *:ssh (LISTEN)sshd    365 root    4u  IPv6  15187      0t0  TCP *:ssh (LISTEN)sshd    439 root    3u  IPv4  16512      0t0  TCP debian:ssh-&gt;192.168.122.1:41104 (ESTABLISHED)sshd    451   ww    3u  IPv4  16512      0t0  TCP debian:ssh-&gt;192.168.122.1:41104 (ESTABLISHED)</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> Command </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
-            
-            <tag> Command </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>mariadb 简单配置</title>
       <link href="//921d9bcb/"/>
       <url>//921d9bcb/</url>
@@ -810,6 +783,33 @@
             <tag> Linux </tag>
             
             <tag> RHCE </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux 命令 -- lsof</title>
+      <link href="//aa81bac1/"/>
+      <url>//aa81bac1/</url>
+      
+        <content type="html"><![CDATA[<p>lsof (list open files)是一个列出当前系统打开文件的工具。在Linux环境下，任何事物都是以文件的形式存在，通过文件不仅仅可以访问常规数据，还可以访问网络链接和硬件。所以如传输控制协议（tcp）和用户数据报协议（udp）套接字等，系统在后台为该应用程序分配了一个文件描述符，无论这个文件的本质如何，该文件描述符为应用程序于基础操作系统之间的交互提供了通用的接口。因为应用程序打开文件的描述符列表提供了大量关于这个应用程序本身的信息，因此通过lsof工具能查看这个列表对系统监测以及排错将是有很大帮助的。</p><p>命令格式</p><p>lsof [参数] [文件]</p><p>命令功能</p><p>用于查看进程打开的文件，端口。找回、恢复删除的文件。</p><p>命令参数</p><p>-a 列出打开文件存在的进程</p><p>-c&lt;进程名&gt; 列出指定进程打开的文件</p><p>-g 列出GID号进程详情</p><p>+d&lt;目录&gt; 列出目录下被打开的文件</p><p>+D&lt;目录&gt; 递归列出目录下被打开的文件</p><p>-i 列出符合条件的进程（4、6、协议、端口、@ip）</p><p>示例</p><ol><li><p>不加参数</p><p> root@debian:~# lsof | head -n 20<br> COMMAND   PID TID TASKCMD               USER   FD      TYPE     DEVICE SIZE&#x2F;OFF       NODE NAME<br> systemd     1                           root  cwd       DIR      254,1     4096          2 &#x2F;<br> systemd     1                           root  rtd       DIR      254,1     4096          2 &#x2F;<br> systemd     1                           root  txt       REG      254,1  1443404     662341 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;systemd<br> systemd     1                           root  mem       REG      254,1  1066528     656039 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libm-2.28.so<br> systemd     1                           root  mem       REG      254,1   153068     659481 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libudev.so.1.6.13<br> systemd     1                           root  mem       REG      254,1   144840     656311 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libgpg-error.so.0.26.1<br> systemd     1                           root  mem       REG      254,1    46404     659376 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libjson-c.so.3.0.1<br> systemd     1                           root  mem       REG      254,1    50568     659375 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libargon2.so.1<br> systemd     1                           root  mem       REG      254,1   401416     656842 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libdevmapper.so.1.02.1<br> systemd     1                           root  mem       REG      254,1    34192     658756 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libuuid.so.1.3.0<br> systemd     1                           root  mem       REG      254,1    21812     655781 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libattr.so.1.1.2448<br> systemd     1                           root  mem       REG      254,1  2868032     659391 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libcrypto.so.1.1<br> systemd     1                           root  mem       REG      254,1   614756     659392 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libssl.so.1.1<br> systemd     1                           root  mem       REG      254,1    26136     655697 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libcap-ng.so.0.0.0<br> systemd     1                           root  mem       REG      254,1    17924     656038 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libdl-2.28.so<br> systemd     1                           root  mem       REG      254,1   488784     655764 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libpcre.so.3.13.3<br> systemd     1                           root  mem       REG      254,1   149124     656053 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libpthread-2.28.so<br> systemd     1                           root  mem       REG      254,1   378732     657121 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;libblkid.so.1.1.0<br> systemd     1                           root  mem       REG      254,1   124444     656362 &#x2F;usr&#x2F;lib&#x2F;i386-linux-gnu&#x2F;liblz4.so.1.8.3</p></li></ol><p>说明：</p><p>COMMAND：进程名称</p><p>PID：进程标识符</p><p>PPID：父进程标识符（需要指定-R参数）</p><p>USER：进程所有者</p><p>PGID：进程所属组</p><p>FD：文件描述符，应用程序通过文件描述符识别该文件</p><p>2）列出某个文件相关进程</p><pre><code>root@debian:~# lsof /bin/bashCOMMAND PID USER  FD   TYPE DEVICE SIZE/OFF   NODE NAMEbash    452   ww txt    REG  254,1  1302248 656751 /usr/bin/bashbash    458 root txt    REG  254,1  1302248 656751 /usr/bin/bash</code></pre><p>3）列出某个进程打开的文件</p><pre><code>COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF   NODE NAMEbash    452   ww  cwd    DIR  254,1     4096 797082 /home/wwbash    452   ww  rtd    DIR  254,1     4096      2 /bash    452   ww  txt    REG  254,1  1302248 656751 /usr/bin/bashbash    452   ww  mem    REG  254,1    54908 656047 /usr/lib/i386-linux-gnu/libnss_files-2.28.sobash    452   ww  mem    REG  254,1    26400 658382 /usr/lib/i386-linux-gnu/gconv/gconv-modules.cachebash    452   ww  mem    REG  254,1  3246832 655804 /usr/lib/locale/locale-archivebash    452   ww  mem    REG  254,1  1947056 656036 /usr/lib/i386-linux-gnu/libc-2.28.sobash    452   ww  mem    REG  254,1    17924 656038 /usr/lib/i386-linux-gnu/libdl-2.28.sobash    452   ww  mem    REG  254,1   161928 656345 /usr/lib/i386-linux-gnu/libtinfo.so.6.1bash    452   ww  mem    REG  254,1   167244 655375 /usr/lib/i386-linux-gnu/ld-2.28.sobash    452   ww    0u   CHR  136,0      0t0      3 /dev/pts/0bash    452   ww    1u   CHR  136,0      0t0      3 /dev/pts/0bash    452   ww    2u   CHR  136,0      0t0      3 /dev/pts/0bash    452   ww  255u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root  cwd    DIR  254,1     4096 917506 /rootbash    458 root  rtd    DIR  254,1     4096      2 /bash    458 root  txt    REG  254,1  1302248 656751 /usr/bin/bashbash    458 root  mem    REG  254,1   149124 656053 /usr/lib/i386-linux-gnu/libpthread-2.28.sobash    458 root  mem    REG  254,1    38868 656055 /usr/lib/i386-linux-gnu/librt-2.28.sobash    458 root  mem    REG  254,1   285204 665107 /usr/lib/i386-linux-gnu/libnss_systemd.so.2bash    458 root  mem    REG  254,1    54908 656047 /usr/lib/i386-linux-gnu/libnss_files-2.28.sobash    458 root  mem    REG  254,1    26400 658382 /usr/lib/i386-linux-gnu/gconv/gconv-modules.cachebash    458 root  mem    REG  254,1  3246832 655804 /usr/lib/locale/locale-archivebash    458 root  mem    REG  254,1  1947056 656036 /usr/lib/i386-linux-gnu/libc-2.28.sobash    458 root  mem    REG  254,1    17924 656038 /usr/lib/i386-linux-gnu/libdl-2.28.sobash    458 root  mem    REG  254,1   161928 656345 /usr/lib/i386-linux-gnu/libtinfo.so.6.1bash    458 root  mem    REG  254,1   167244 655375 /usr/lib/i386-linux-gnu/ld-2.28.sobash    458 root    0u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root    1u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root    2u   CHR  136,0      0t0      3 /dev/pts/0bash    458 root  255u   CHR  136,0      0t0      3 /dev/pts/0</code></pre><p>4）列出打开某个端口的进程</p><pre><code>root@debian:~# lsof -i :22COMMAND PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAMEsshd    365 root    3u  IPv4  15176      0t0  TCP *:ssh (LISTEN)sshd    365 root    4u  IPv6  15187      0t0  TCP *:ssh (LISTEN)sshd    439 root    3u  IPv4  16512      0t0  TCP debian:ssh-&gt;192.168.122.1:41104 (ESTABLISHED)sshd    451   ww    3u  IPv4  16512      0t0  TCP debian:ssh-&gt;192.168.122.1:41104 (ESTABLISHED)</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> Command </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> Command </tag>
             
         </tags>
       
@@ -926,31 +926,6 @@
     
     
     <entry>
-      <title>Samba 文件共享服务</title>
-      <link href="//b902a5ac/"/>
-      <url>//b902a5ac/</url>
-      
-        <content type="html"><![CDATA[<p>软件包</p><p>####centos</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>####debian</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>守护进程</p><p>smb（smbd）</p><p>提供文件共享和打印机共享</p><p>提供用户权限的认证和解锁</p><p>tcp 139 445</p><p>nmb（nmbd）</p><p>提供NETBIOS名称解析服务</p><p>Common Internet File System （cifs） mount.cifs 由cifs-utils包提供</p><p>udp 137</p><p>快速配置</p><p>服务端</p><p>安装Samba软件包</p><p>创建共享目录</p><p>修改配置文件（&#x2F;etc&#x2F;samba&#x2F;smb.conf) debian上的配置文件是&#x2F;etc&#x2F;smb.conf</p><p>vim &#x2F;etc&#x2F;samba&#x2F;smb.conf</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[share] #共享名称</span><br><span class="line">comment = share for mysel #共享描述</span><br><span class="line">path = /common #之前创建的共享目录</span><br><span class="line">browseable = YES #所有人可见</span><br><span class="line">guest ok = NO #拒绝匿名用户访问</span><br><span class="line">writable = YES #数据可写</span><br></pre></td></tr></table></figure><p>修改selinux上下文权限(可能会需要在selinux是enforcing状态下修改)</p><p>chcon -t samba_share_t &#x2F;common</p><p>创建Samba共享访问账户</p><p>useradd -s &#x2F;sbin&#x2F;nologin harry</p><p>smbpasswd -a harry</p><p>-a 添加Samba账户并设置密码</p><p>-x 删除Samba用户</p><p>-d 禁用Samba账户</p><p>-e 启用Samba账户</p><p>启动服务</p><p>systemctl restart smb nmb</p><p>systemctl enable smb nmb</p><p>设置防火墙</p><p>firewall-cmd –permanent –add-service&#x3D;samba</p><p>firewall-cmd –reload</p><p>setenforce 0 (或者vim &#x2F;etc&#x2F;selinux&#x2F;config设置为disable并重启)</p><p>客户端</p><p>Windows开启网络映射方便使用</p><p>Linux桌面客户端同样容易连接</p><p>Android使用es文件浏览器访问</p><p>Linux 命令行：</p><p>登录：smbclient -U harry &#x2F;&#x2F;192.168.x.x &#x2F;common</p><p>挂载：yum install cifs-utils</p><p>mount.cifs &#x2F;&#x2F;192.168.x.x  &#x2F;common &#x2F;mnt&#x2F;smbshare -o user&#x3D;harry</p>]]></content>
-      
-      
-      <categories>
-          
-          <category> Linux </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> Linux </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>Linux 命令 -- scp</title>
       <link href="//542c15c7/"/>
       <url>//542c15c7/</url>
@@ -970,6 +945,31 @@
             <tag> Linux </tag>
             
             <tag> Command </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Samba 文件共享服务</title>
+      <link href="//b902a5ac/"/>
+      <url>//b902a5ac/</url>
+      
+        <content type="html"><![CDATA[<p>软件包</p><p>####centos</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>####debian</p><ul><li><p>samba</p></li><li><p>samba-client</p></li><li><p>samba-common</p></li></ul><p>守护进程</p><p>smb（smbd）</p><p>提供文件共享和打印机共享</p><p>提供用户权限的认证和解锁</p><p>tcp 139 445</p><p>nmb（nmbd）</p><p>提供NETBIOS名称解析服务</p><p>Common Internet File System （cifs） mount.cifs 由cifs-utils包提供</p><p>udp 137</p><p>快速配置</p><p>服务端</p><p>安装Samba软件包</p><p>创建共享目录</p><p>修改配置文件（&#x2F;etc&#x2F;samba&#x2F;smb.conf) debian上的配置文件是&#x2F;etc&#x2F;smb.conf</p><p>vim &#x2F;etc&#x2F;samba&#x2F;smb.conf</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[share] #共享名称</span><br><span class="line">comment = share for mysel #共享描述</span><br><span class="line">path = /common #之前创建的共享目录</span><br><span class="line">browseable = YES #所有人可见</span><br><span class="line">guest ok = NO #拒绝匿名用户访问</span><br><span class="line">writable = YES #数据可写</span><br></pre></td></tr></table></figure><p>修改selinux上下文权限(可能会需要在selinux是enforcing状态下修改)</p><p>chcon -t samba_share_t &#x2F;common</p><p>创建Samba共享访问账户</p><p>useradd -s &#x2F;sbin&#x2F;nologin harry</p><p>smbpasswd -a harry</p><p>-a 添加Samba账户并设置密码</p><p>-x 删除Samba用户</p><p>-d 禁用Samba账户</p><p>-e 启用Samba账户</p><p>启动服务</p><p>systemctl restart smb nmb</p><p>systemctl enable smb nmb</p><p>设置防火墙</p><p>firewall-cmd –permanent –add-service&#x3D;samba</p><p>firewall-cmd –reload</p><p>setenforce 0 (或者vim &#x2F;etc&#x2F;selinux&#x2F;config设置为disable并重启)</p><p>客户端</p><p>Windows开启网络映射方便使用</p><p>Linux桌面客户端同样容易连接</p><p>Android使用es文件浏览器访问</p><p>Linux 命令行：</p><p>登录：smbclient -U harry &#x2F;&#x2F;192.168.x.x &#x2F;common</p><p>挂载：yum install cifs-utils</p><p>mount.cifs &#x2F;&#x2F;192.168.x.x  &#x2F;common &#x2F;mnt&#x2F;smbshare -o user&#x3D;harry</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
             
         </tags>
       
